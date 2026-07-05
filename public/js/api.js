@@ -179,3 +179,283 @@ async function eliminarReceta(id) {
     await dbEliminar('receta_ingredientes', ing.id);
   }
 }
+// --- Calendario ---
+
+const TIPOS_COMIDA = ['desayuno', 'colacion', 'almuerzo', 'merienda', 'once', 'snack_nocturno'];
+
+async function calcularMacrosDeItem(item) {
+  if (item.alimento_id) {
+    const alimentos = await dbObtenerTodos('alimentos');
+    const alimento = alimentos.find(a => a.id === item.alimento_id);
+    const factor = item.gramos / 100;
+    return redondearMacros({
+      calorias: alimento.calorias_100g * factor,
+      proteinas_g: alimento.proteinas_100g * factor,
+      carbohidratos_g: alimento.carbohidratos_100g * factor,
+      grasas_g: alimento.grasas_100g * factor
+    });
+  }
+
+  if (item.receta_id) {
+    const macrosBase = await calcularMacrosDeReceta(item.receta_id);
+    return redondearMacros({
+      calorias: macrosBase.calorias * item.porciones,
+      proteinas_g: macrosBase.proteinas_g * item.porciones,
+      carbohidratos_g: macrosBase.carbohidratos_g * item.porciones,
+      grasas_g: macrosBase.grasas_g * item.porciones
+    });
+  }
+
+  return { calorias: 0, proteinas_g: 0, carbohidratos_g: 0, grasas_g: 0 };
+}
+
+function sumarMacros(listaMacros) {
+  return listaMacros.reduce((acc, m) => {
+    acc.calorias += m.calorias;
+    acc.proteinas_g += m.proteinas_g;
+    acc.carbohidratos_g += m.carbohidratos_g;
+    acc.grasas_g += m.grasas_g;
+    return acc;
+  }, { calorias: 0, proteinas_g: 0, carbohidratos_g: 0, grasas_g: 0 });
+}
+
+async function obtenerItemsDeComida(comidaId) {
+  const items = await dbObtenerPorIndice('comida_items', 'comida_id', comidaId);
+  const alimentos = await dbObtenerTodos('alimentos');
+  const recetas = await dbObtenerTodos('recetas');
+
+  const resultado = [];
+  for (const item of items) {
+    const alimento = item.alimento_id ? alimentos.find(a => a.id === item.alimento_id) : null;
+    const receta = item.receta_id ? recetas.find(r => r.id === item.receta_id) : null;
+    const macros = await calcularMacrosDeItem(item);
+    resultado.push({
+      ...item,
+      alimento_nombre: alimento?.nombre,
+      receta_nombre: receta?.nombre,
+      macros
+    });
+  }
+  return resultado;
+}
+
+async function obtenerDia(usuarioId, fechaISO) {
+  usuarioId = Number(usuarioId);
+  const dias = await dbObtenerPorIndice('dias', 'usuario_fecha', [usuarioId, fechaISO]);
+  let dia = dias[0];
+
+  if (!dia) {
+    dia = await dbAgregar('dias', { usuario_id: usuarioId, fecha: fechaISO });
+    for (const tipo of TIPOS_COMIDA) {
+      await dbAgregar('comidas', { dia_id: dia.id, tipo });
+    }
+  }
+
+  const comidas = await dbObtenerPorIndice('comidas', 'dia_id', dia.id);
+  const comidasConItems = [];
+
+  for (const comida of comidas) {
+    const items = await obtenerItemsDeComida(comida.id);
+    const macros = sumarMacros(items.map(i => i.macros));
+    comidasConItems.push({ ...comida, items, macros });
+  }
+
+  const macrosDelDia = sumarMacros(comidasConItems.flatMap(c => c.items.map(i => i.macros)));
+
+  return { ...dia, comidas: comidasConItems, macrosDelDia };
+}
+
+async function agregarItemComida(comidaId, datos) {
+  return dbAgregar('comida_items', {
+    comida_id: Number(comidaId),
+    alimento_id: datos.alimento_id ? Number(datos.alimento_id) : null,
+    receta_id: datos.receta_id ? Number(datos.receta_id) : null,
+    gramos: datos.gramos || null,
+    porciones: datos.porciones || 1
+  });
+}
+
+async function eliminarItemComida(itemId) {
+  await dbEliminar('comida_items', Number(itemId));
+}
+
+// --- Agua ---
+
+async function obtenerAgua(usuarioId, fechaISO) {
+  usuarioId = Number(usuarioId);
+  const registros = await dbObtenerPorIndice('registro_agua', 'usuario_fecha', [usuarioId, fechaISO]);
+
+  if (registros.length > 0) return registros[0];
+
+  return dbAgregar('registro_agua', {
+    usuario_id: usuarioId,
+    fecha: fechaISO,
+    mililitros: 0,
+    meta_ml: 2000
+  });
+}
+
+async function agregarAgua(usuarioId, fechaISO, mililitros) {
+  const registro = await obtenerAgua(usuarioId, fechaISO);
+  registro.mililitros = Math.max(0, registro.mililitros + mililitros);
+  return dbGuardar('registro_agua', registro);
+}
+
+// --- Inventario ---
+
+async function obtenerInventario(usuarioId) {
+  const items = await dbObtenerPorIndice('inventario', 'usuario_alimento', IDBKeyRange.bound(
+    [Number(usuarioId), -Infinity], [Number(usuarioId), Infinity]
+  ));
+  const alimentos = await dbObtenerTodos('alimentos');
+
+  return items.map(item => ({
+    ...item,
+    alimento_nombre: alimentos.find(a => a.id === item.alimento_id)?.nombre
+  })).sort((a, b) => a.alimento_nombre.localeCompare(b.alimento_nombre));
+}
+
+async function guardarEnInventario(usuarioId, alimentoId, cantidadGramos) {
+  usuarioId = Number(usuarioId);
+  alimentoId = Number(alimentoId);
+
+  const existentes = await dbObtenerPorIndice('inventario', 'usuario_alimento', [usuarioId, alimentoId]);
+
+  if (existentes.length > 0) {
+    existentes[0].cantidad_gramos = cantidadGramos;
+    existentes[0].actualizado_en = new Date().toISOString();
+    return dbGuardar('inventario', existentes[0]);
+  }
+
+  return dbAgregar('inventario', {
+    usuario_id: usuarioId,
+    alimento_id: alimentoId,
+    cantidad_gramos: cantidadGramos,
+    actualizado_en: new Date().toISOString()
+  });
+}
+
+async function ajustarInventario(usuarioId, alimentoId, delta) {
+  usuarioId = Number(usuarioId);
+  alimentoId = Number(alimentoId);
+
+  const existentes = await dbObtenerPorIndice('inventario', 'usuario_alimento', [usuarioId, alimentoId]);
+  const actual = existentes[0]?.cantidad_gramos || 0;
+  const nuevaCantidad = Math.max(0, actual + delta);
+
+  await guardarEnInventario(usuarioId, alimentoId, nuevaCantidad);
+  return { cantidad_gramos: nuevaCantidad };
+}
+
+async function eliminarDeInventario(usuarioId, alimentoId) {
+  const existentes = await dbObtenerPorIndice('inventario', 'usuario_alimento', [Number(usuarioId), Number(alimentoId)]);
+  if (existentes[0]) await dbEliminar('inventario', existentes[0].id);
+}
+
+async function obtenerNecesidadesSemana(usuarioId, inicioISO, finISO) {
+  usuarioId = Number(usuarioId);
+  const necesidades = {};
+
+  const todosDias = await dbObtenerTodos('dias');
+  const diasDeUsuario = todosDias.filter(
+    d => d.usuario_id === usuarioId && d.fecha >= inicioISO && d.fecha <= finISO
+  );
+
+  for (const dia of diasDeUsuario) {
+    const comidas = await dbObtenerPorIndice('comidas', 'dia_id', dia.id);
+    for (const comida of comidas) {
+      const items = await dbObtenerPorIndice('comida_items', 'comida_id', comida.id);
+      for (const item of items) {
+        if (item.alimento_id) {
+          necesidades[item.alimento_id] = (necesidades[item.alimento_id] || 0) + item.gramos;
+        }
+        if (item.receta_id) {
+          const ingredientes = await obtenerIngredientesDeReceta(item.receta_id);
+          for (const ing of ingredientes) {
+            const gramosUsados = ing.gramos * item.porciones;
+            necesidades[ing.alimento_id] = (necesidades[ing.alimento_id] || 0) + gramosUsados;
+          }
+        }
+      }
+    }
+  }
+
+  const alimentos = await dbObtenerTodos('alimentos');
+  const inventario = await obtenerInventario(usuarioId);
+  const resultado = [];
+
+  for (const [alimentoId, gramosNecesarios] of Object.entries(necesidades)) {
+    const alimento = alimentos.find(a => a.id === Number(alimentoId));
+    const enInventario = inventario.find(i => i.alimento_id === Number(alimentoId));
+    const disponible = enInventario ? enInventario.cantidad_gramos : 0;
+    const faltante = Math.max(0, gramosNecesarios - disponible);
+
+    resultado.push({
+      alimento_id: Number(alimentoId),
+      nombre: alimento.nombre,
+      necesario_gramos: Math.round(gramosNecesarios),
+      disponible_gramos: Math.round(disponible),
+      faltante_gramos: Math.round(faltante)
+    });
+  }
+
+  return resultado.sort((a, b) => b.faltante_gramos - a.faltante_gramos);
+}
+
+// --- Peso ---
+
+async function obtenerHistorialPeso(usuarioId) {
+  const registros = await dbObtenerPorIndice('registro_peso', 'usuario_id', Number(usuarioId));
+  return registros.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+}
+
+async function crearRegistroPeso(usuarioId, datos) {
+  usuarioId = Number(usuarioId);
+
+  const registro = await dbAgregar('registro_peso', {
+    usuario_id: usuarioId,
+    peso_kg: datos.peso_kg,
+    porcentaje_grasa: datos.porcentaje_grasa || null,
+    masa_muscular_kg: datos.masa_muscular_kg || null,
+    fecha: new Date().toISOString()
+  });
+
+  const perfil = await obtenerPerfil(usuarioId);
+  if (perfil) {
+    perfil.peso_actual_kg = datos.peso_kg;
+    await dbGuardar('perfil', perfil);
+  }
+
+  return registro;
+}
+
+async function eliminarRegistroPeso(id) {
+  await dbEliminar('registro_peso', Number(id));
+}
+
+// --- Recordatorios ---
+
+async function obtenerRecordatorios(usuarioId) {
+  const registros = await dbObtenerPorIndice('recordatorios', 'usuario_tipo', IDBKeyRange.bound(
+    [Number(usuarioId), ''], [Number(usuarioId), '\uffff']
+  ));
+  return registros.sort((a, b) => a.hora.localeCompare(b.hora));
+}
+
+async function guardarRecordatorio(usuarioId, tipo, hora, activo) {
+  usuarioId = Number(usuarioId);
+  const existentes = await dbObtenerPorIndice('recordatorios', 'usuario_tipo', [usuarioId, tipo]);
+
+  const registro = {
+    usuario_id: usuarioId,
+    tipo,
+    hora,
+    activo: activo ? 1 : 0
+  };
+
+  if (existentes.length > 0) {
+    registro.id = existentes[0].id;
+  }
+
+  return dbGuardar('recordatorios', registro);
+}
