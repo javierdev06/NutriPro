@@ -8,3 +8,12 @@ async function verificarBackend() {
     estadoElemento.textContent = 'No se pudo conectar con el backend';
   }
 }
+
+async function crearUsuarioPrueba(nombre) {
+  const respuesta = await fetch('/api/usuario', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ nombre })
+  });
+  return respuesta.json();
+}

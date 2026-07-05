@@ -2,6 +2,10 @@ import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import db from './src/db/database.js';
+import usuarioRoutes from './src/routes/usuarioRoutes.js';
+import perfilRoutes from './src/routes/perfilRoutes.js';
+import objetivoRoutes from './src/routes/objetivoRoutes.js';
 
 dotenv.config();
 
@@ -13,6 +17,11 @@ app.use(express.json());
 
 // Sirve los archivos del frontend (carpeta public)
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Rutas de la API
+app.use('/api/usuario', usuarioRoutes);
+app.use('/api/perfil', perfilRoutes);
+app.use('/api/objetivo', objetivoRoutes);
 
 // Ruta de prueba de la API
 app.get('/api/health', (req, res) => {
