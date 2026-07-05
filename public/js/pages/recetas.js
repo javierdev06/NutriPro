@@ -140,7 +140,7 @@ formReceta.addEventListener('submit', async (evento) => {
     formReceta.style.display = 'none';
     ingredientesSeleccionados = [];
     listaIngredientes.innerHTML = '';
-    cargarRecetas();
+    document.addEventListener('datosListos', cargarRecetas);
   } catch (error) {
     mensaje.textContent = 'Ocurrio un error al guardar la receta';
     mensaje.classList.add('error');

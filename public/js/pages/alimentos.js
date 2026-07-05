@@ -83,5 +83,7 @@ formAlimento.addEventListener('submit', async (evento) => {
   }
 });
 
-cargarCategorias();
-cargarAlimentos();
+document.addEventListener('datosListos', () => {
+  cargarCategorias();
+  cargarAlimentos();
+});
