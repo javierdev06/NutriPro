@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NutriPro — Recetas</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+</head>
+<body>
+  <div class="pagina">
+    <header class="encabezado">
+      <h1>Recetas</h1>
+    </header>
+
+    <main class="contenido">
+      <button id="btn-mostrar-formulario" class="boton-secundario">Nueva receta</button>
+
+      <form id="form-receta" class="tarjeta" style="display:none;">
+        <div class="campo">
+          <label for="nombre-receta">Nombre de la receta</label>
+          <input type="text" id="nombre-receta" required>
+        </div>
+
+        <div class="campo">
+          <label for="descripcion-receta">Descripcion (opcional)</label>
+          <input type="text" id="descripcion-receta">
+        </div>
+
+        <div class="campo">
+          <label for="tiempo-receta">Tiempo de preparacion (minutos)</label>
+          <input type="number" id="tiempo-receta">
+        </div>
+
+        <div class="campo">
+          <label for="instrucciones-receta">Instrucciones</label>
+          <textarea id="instrucciones-receta" rows="4"></textarea>
+        </div>
+
+        <hr style="border-color:#374151; width:100%;">
+
+        <div class="campo">
+          <label for="buscar-ingrediente">Agregar ingrediente</label>
+          <input type="text" id="buscar-ingrediente" placeholder="Buscar alimento...">
+          <div id="resultados-busqueda" class="resultados-busqueda"></div>
+        </div>
+
+        <div id="lista-ingredientes" class="lista-ingredientes"></div>
+
+        <div class="macros-totales" id="macros-totales">
+          Calorias: 0 · Proteinas: 0g · Carbohidratos: 0g · Grasas: 0g
+        </div>
+
+        <button type="submit" class="boton-principal">Guardar receta</button>
+      </form>
+
+      <p id="mensaje-receta" class="mensaje"></p>
+
+      <div id="lista-recetas" class="lista-alimentos"></div>
+    </main>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/pages/recetas.js"></script>
+</body>
+</html>

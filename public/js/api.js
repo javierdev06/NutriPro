@@ -87,3 +87,23 @@ async function obtenerCategorias() {
   const respuesta = await fetch('/api/categorias');
   return respuesta.json();
 }
+
+// --- Recetas ---
+
+async function obtenerRecetas() {
+  const respuesta = await fetch('/api/recetas');
+  return respuesta.json();
+}
+
+async function crearReceta(datos) {
+  const respuesta = await fetch('/api/recetas', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(datos)
+  });
+  return respuesta.json();
+}
+
+async function eliminarReceta(id) {
+  await fetch(`/api/recetas/${id}`, { method: 'DELETE' });
+}
