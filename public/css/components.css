@@ -87,3 +87,40 @@
 .boton-secundario:hover {
   background-color: rgba(74, 222, 128, 0.1);
 }
+
+.lista-alimentos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.tarjeta-alimento {
+  background-color: #1f2937;
+  border-radius: 10px;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tarjeta-alimento .info-alimento h3 {
+  font-size: 1rem;
+  color: #ffffff;
+  margin-bottom: 0.2rem;
+}
+
+.tarjeta-alimento .info-alimento span {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.tarjeta-alimento .macros-alimento {
+  text-align: right;
+  font-size: 0.85rem;
+  color: #d1d5db;
+}
+
+.tarjeta-alimento .macros-alimento strong {
+  color: #4ade80;
+}

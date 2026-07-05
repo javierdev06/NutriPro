@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NutriPro — Alimentos</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+</head>
+<body>
+  <div class="pagina">
+    <header class="encabezado">
+      <h1>Alimentos</h1>
+    </header>
+
+    <main class="contenido">
+      <div class="campo">
+        <input type="text" id="input-buscar" placeholder="Buscar alimento...">
+      </div>
+
+      <button id="btn-mostrar-formulario" class="boton-secundario">
+        Agregar alimento personalizado
+      </button>
+
+      <form id="form-alimento" class="tarjeta" style="display:none;">
+        <div class="campo">
+          <label for="nombre-alimento">Nombre</label>
+          <input type="text" id="nombre-alimento" required>
+        </div>
+
+        <div class="campo">
+          <label for="categoria-alimento">Categoria</label>
+          <select id="categoria-alimento">
+            <option value="">Sin categoria</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="calorias-alimento">Calorias (por 100g)</label>
+          <input type="number" id="calorias-alimento" step="0.1" required>
+        </div>
+
+        <div class="campo">
+          <label for="proteinas-alimento">Proteinas (g por 100g)</label>
+          <input type="number" id="proteinas-alimento" step="0.1" required>
+        </div>
+
+        <div class="campo">
+          <label for="carbohidratos-alimento">Carbohidratos (g por 100g)</label>
+          <input type="number" id="carbohidratos-alimento" step="0.1" required>
+        </div>
+
+        <div class="campo">
+          <label for="grasas-alimento">Grasas (g por 100g)</label>
+          <input type="number" id="grasas-alimento" step="0.1" required>
+        </div>
+
+        <button type="submit" class="boton-principal">Guardar alimento</button>
+      </form>
+
+      <p id="mensaje-alimento" class="mensaje"></p>
+
+      <div id="lista-alimentos" class="lista-alimentos"></div>
+    </main>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/pages/alimentos.js"></script>
+</body>
+</html>

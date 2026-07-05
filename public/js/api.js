@@ -66,3 +66,24 @@ async function guardarObjetivo(usuarioId, tipo, macrosManuales = null) {
   });
   return respuesta.json();
 }
+
+// --- Alimentos ---
+
+async function buscarAlimentos(texto = '') {
+  const respuesta = await fetch(`/api/alimentos?buscar=${encodeURIComponent(texto)}`);
+  return respuesta.json();
+}
+
+async function crearAlimentoPersonalizado(datos) {
+  const respuesta = await fetch('/api/alimentos', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ...datos, es_personalizado: true })
+  });
+  return respuesta.json();
+}
+
+async function obtenerCategorias() {
+  const respuesta = await fetch('/api/categorias');
+  return respuesta.json();
+}
