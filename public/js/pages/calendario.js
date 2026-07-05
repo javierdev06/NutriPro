@@ -107,6 +107,23 @@ document.getElementById('btn-semana-siguiente').addEventListener('click', () => 
   renderizarSemana();
 });
 
+document.getElementById('btn-generar-plan').addEventListener('click', async () => {
+  const confirmado = confirm(
+    'Esto va a reemplazar todos los alimentos ya asignados en esta semana. ¿Deseas continuar?'
+  );
+  if (!confirmado) return;
+
+  const dias = obtenerDiasDeLaSemana(fechaReferencia);
+  const inicioISO = formatearFechaISO(dias[0]);
+
+  try {
+    await generarPlanSemanal(usuarioActual.id, inicioISO);
+    await renderizarSemana();
+  } catch (error) {
+    alert(error.message);
+  }
+});
+
 // --- Modal ---
 
 function abrirModal(comidaId) {

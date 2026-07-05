@@ -459,3 +459,89 @@ async function guardarRecordatorio(usuarioId, tipo, hora, activo) {
 
   return dbGuardar('recordatorios', registro);
 }
+// --- Generador de plan semanal ---
+
+const DISTRIBUCION_CALORIAS = {
+  desayuno: 0.20,
+  colacion: 0.10,
+  almuerzo: 0.30,
+  merienda: 0.10,
+  once: 0.20,
+  snack_nocturno: 0.10
+};
+
+const COMPOSICION_COMIDAS = {
+  desayuno: [
+    { categoria: 'Carbohidratos', proporcion: 0.5 },
+    { categoria: 'Proteinas animales', proporcion: 0.3 },
+    { categoria: 'Frutas', proporcion: 0.2 }
+  ],
+  colacion: [
+    { categoria: 'Frutas', proporcion: 0.6 },
+    { categoria: 'Grasas y frutos secos', proporcion: 0.4 }
+  ],
+  almuerzo: [
+    { categoria: 'Proteinas animales', proporcion: 0.4 },
+    { categoria: 'Carbohidratos', proporcion: 0.4 },
+    { categoria: 'Verduras', proporcion: 0.2 }
+  ],
+  merienda: [
+    { categoria: 'Lacteos', proporcion: 0.6 },
+    { categoria: 'Grasas y frutos secos', proporcion: 0.4 }
+  ],
+  once: [
+    { categoria: 'Carbohidratos', proporcion: 0.5 },
+    { categoria: 'Proteinas animales', proporcion: 0.3 },
+    { categoria: 'Verduras', proporcion: 0.2 }
+  ],
+  snack_nocturno: [
+    { categoria: 'Lacteos', proporcion: 0.7 },
+    { categoria: 'Frutas', proporcion: 0.3 }
+  ]
+};
+
+async function generarPlanSemanal(usuarioId, fechaInicioISO) {
+  const perfil = await obtenerPerfil(usuarioId);
+  const objetivo = await obtenerObjetivoActivo(usuarioId);
+
+  if (!perfil) throw new Error('Primero debes completar tu perfil');
+  if (!objetivo) throw new Error('Primero debes definir tu objetivo');
+
+  const alimentos = await dbObtenerTodos('alimentos');
+  const categorias = await obtenerCategorias();
+  const idPorCategoria = {};
+  categorias.forEach(c => idPorCategoria[c.nombre] = c.id);
+
+  for (let diaIndex = 0; diaIndex < 7; diaIndex++) {
+    const fecha = new Date(fechaInicioISO + 'T00:00:00');
+    fecha.setDate(fecha.getDate() + diaIndex);
+    const fechaISO = formatearFechaISO(fecha);
+
+    const dia = await obtenerDia(usuarioId, fechaISO);
+
+    for (const comida of dia.comidas) {
+      // Limpia los items existentes de esta comida antes de generar el plan nuevo
+      for (const item of comida.items) {
+        await eliminarItemComida(item.id);
+      }
+
+      const composicion = COMPOSICION_COMIDAS[comida.tipo];
+      const caloriasComida = objetivo.calorias_objetivo * DISTRIBUCION_CALORIAS[comida.tipo];
+
+      for (const slot of composicion) {
+        const categoriaId = idPorCategoria[slot.categoria];
+        const opciones = alimentos.filter(a => a.categoria_id === categoriaId);
+        if (opciones.length === 0) continue;
+
+        // Rota el alimento segun el dia, para que la semana tenga variedad
+        const alimento = opciones[diaIndex % opciones.length];
+        const caloriasSlot = caloriasComida * slot.proporcion;
+
+        let gramos = Math.round((caloriasSlot * 100 / alimento.calorias_100g) / 5) * 5;
+        gramos = Math.max(20, gramos);
+
+        await agregarItemComida(comida.id, { alimento_id: alimento.id, gramos });
+      }
+    }
+  }
+}
