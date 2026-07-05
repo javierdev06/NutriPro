@@ -1,0 +1,152 @@
+.pagina-ancha {
+  max-width: 100%;
+  padding: 2rem;
+}
+
+.navegacion-semana {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.navegacion-semana span {
+  font-weight: 600;
+  color: #d1d5db;
+}
+
+.contenedor-dias {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+}
+
+.tarjeta-dia {
+  background-color: #1f2937;
+  border-radius: 12px;
+  padding: 1rem;
+  min-width: 260px;
+  flex: 1 0 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.tarjeta-dia h2 {
+  font-size: 1rem;
+  color: #4ade80;
+}
+
+.tarjeta-dia .fecha-dia {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-bottom: 0.3rem;
+}
+
+.resumen-dia {
+  background-color: #111827;
+  border-radius: 8px;
+  padding: 0.5rem;
+  font-size: 0.8rem;
+  color: #4ade80;
+  text-align: center;
+}
+
+.bloque-comida {
+  background-color: #111827;
+  border-radius: 8px;
+  padding: 0.6rem;
+}
+
+.bloque-comida .titulo-comida {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.bloque-comida .titulo-comida h4 {
+  font-size: 0.85rem;
+  color: #ffffff;
+}
+
+.bloque-comida .btn-agregar-item {
+  background: none;
+  border: 1px solid #4ade80;
+  color: #4ade80;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.item-comida {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: #d1d5db;
+  padding: 0.3rem 0;
+  border-top: 1px solid #1f2937;
+}
+
+.item-comida .btn-quitar-item {
+  background: none;
+  border: none;
+  color: #f87171;
+  cursor: pointer;
+  font-size: 0.7rem;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-caja {
+  background-color: #1f2937;
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 90%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.modal-caja input {
+  background-color: #111827;
+  border: 1px solid #374151;
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  color: #ffffff;
+}
+
+.tabs-modal {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tab-boton {
+  flex: 1;
+  background-color: #111827;
+  border: 1px solid #374151;
+  color: #9ca3af;
+  border-radius: 8px;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.tab-boton.activo {
+  border-color: #4ade80;
+  color: #4ade80;
+}

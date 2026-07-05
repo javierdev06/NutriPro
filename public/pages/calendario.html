@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NutriPro — Calendario</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/calendario.css">
+</head>
+<body>
+  <div class="pagina pagina-ancha">
+    <header class="encabezado">
+      <h1>Calendario semanal</h1>
+    </header>
+
+    <div class="navegacion-semana">
+      <button id="btn-semana-anterior" class="boton-secundario">&larr; Semana anterior</button>
+      <span id="texto-semana"></span>
+      <button id="btn-semana-siguiente" class="boton-secundario">Semana siguiente &rarr;</button>
+    </div>
+
+    <div id="contenedor-dias" class="contenedor-dias"></div>
+  </div>
+
+  <!-- Modal para agregar alimento o receta a una comida -->
+  <div id="modal-agregar-item" class="modal-overlay" style="display:none;">
+    <div class="modal-caja">
+      <h3 id="modal-titulo">Agregar a la comida</h3>
+
+      <div class="tabs-modal">
+        <button type="button" id="tab-alimento" class="tab-boton activo">Alimento</button>
+        <button type="button" id="tab-receta" class="tab-boton">Receta</button>
+      </div>
+
+      <input type="text" id="modal-buscar" placeholder="Buscar...">
+      <div id="modal-resultados" class="resultados-busqueda"></div>
+
+      <div id="modal-seleccion" style="display:none;">
+        <p id="modal-seleccion-nombre" class="mensaje"></p>
+        <div class="campo" id="campo-gramos">
+          <label for="modal-cantidad">Gramos</label>
+          <input type="number" id="modal-cantidad" value="100">
+        </div>
+        <div class="campo" id="campo-porciones" style="display:none;">
+          <label for="modal-porciones">Porciones</label>
+          <input type="number" id="modal-porciones" value="1" step="0.1">
+        </div>
+        <button id="btn-confirmar-item" class="boton-principal">Agregar</button>
+      </div>
+
+      <button id="btn-cerrar-modal" class="boton-secundario">Cancelar</button>
+    </div>
+  </div>
+
+  <script src="../js/utils.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/pages/calendario.js"></script>
+</body>
+</html>

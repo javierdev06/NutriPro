@@ -107,3 +107,23 @@ async function crearReceta(datos) {
 async function eliminarReceta(id) {
   await fetch(`/api/recetas/${id}`, { method: 'DELETE' });
 }
+
+// --- Calendario ---
+
+async function obtenerDia(usuarioId, fechaISO) {
+  const respuesta = await fetch(`/api/calendario/dia/${usuarioId}/${fechaISO}`);
+  return respuesta.json();
+}
+
+async function agregarItemComida(comidaId, datos) {
+  const respuesta = await fetch(`/api/calendario/comida/${comidaId}/items`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(datos)
+  });
+  return respuesta.json();
+}
+
+async function eliminarItemComida(itemId) {
+  await fetch(`/api/calendario/items/${itemId}`, { method: 'DELETE' });
+}
