@@ -8,6 +8,7 @@ import perfilRoutes from './src/routes/perfilRoutes.js';
 import objetivoRoutes from './src/routes/objetivoRoutes.js';
 import categoriaRoutes from './src/routes/categoriaRoutes.js';
 import alimentoRoutes from './src/routes/alimentoRoutes.js';
+import recetaRoutes from './src/routes/recetaRoutes.js';
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use('/api/perfil', perfilRoutes);
 app.use('/api/objetivo', objetivoRoutes);
 app.use('/api/categorias', categoriaRoutes);
 app.use('/api/alimentos', alimentoRoutes);
+app.use('/api/recetas', recetaRoutes);
 
 // Ruta de prueba de la API
 app.get('/api/health', (req, res) => {

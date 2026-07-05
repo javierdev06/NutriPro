@@ -24,3 +24,23 @@ CREATE TABLE IF NOT EXISTS alimentos (
 
 -- Índice para acelerar el buscador de alimentos por nombre
 CREATE INDEX IF NOT EXISTS idx_alimentos_nombre ON alimentos(nombre);
+
+-- Recetas
+CREATE TABLE IF NOT EXISTS recetas (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  nombre TEXT NOT NULL,
+  descripcion TEXT,
+  tiempo_preparacion_min INTEGER,
+  instrucciones TEXT,
+  creado_en TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- Ingredientes de cada receta (relacion receta <-> alimento con su cantidad)
+CREATE TABLE IF NOT EXISTS receta_ingredientes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  receta_id INTEGER NOT NULL,
+  alimento_id INTEGER NOT NULL,
+  gramos REAL NOT NULL,
+  FOREIGN KEY (receta_id) REFERENCES recetas(id) ON DELETE CASCADE,
+  FOREIGN KEY (alimento_id) REFERENCES alimentos(id) ON DELETE CASCADE
+);
