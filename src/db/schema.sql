@@ -44,3 +44,39 @@ CREATE TABLE IF NOT EXISTS receta_ingredientes (
   FOREIGN KEY (receta_id) REFERENCES recetas(id) ON DELETE CASCADE,
   FOREIGN KEY (alimento_id) REFERENCES alimentos(id) ON DELETE CASCADE
 );
+
+-- Días del calendario (con fecha real)
+CREATE TABLE IF NOT EXISTS dias (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  usuario_id INTEGER NOT NULL,
+  fecha TEXT NOT NULL,
+  UNIQUE(usuario_id, fecha),
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+-- Comidas dentro de un día
+CREATE TABLE IF NOT EXISTS comidas (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  dia_id INTEGER NOT NULL,
+  tipo TEXT NOT NULL CHECK (
+    tipo IN ('desayuno', 'colacion', 'almuerzo', 'merienda', 'once', 'snack_nocturno')
+  ),
+  FOREIGN KEY (dia_id) REFERENCES dias(id) ON DELETE CASCADE
+);
+
+-- Items de una comida: pueden ser un alimento suelto o una receta completa
+CREATE TABLE IF NOT EXISTS comida_items (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  comida_id INTEGER NOT NULL,
+  alimento_id INTEGER,
+  receta_id INTEGER,
+  gramos REAL,
+  porciones REAL DEFAULT 1,
+  FOREIGN KEY (comida_id) REFERENCES comidas(id) ON DELETE CASCADE,
+  FOREIGN KEY (alimento_id) REFERENCES alimentos(id) ON DELETE CASCADE,
+  FOREIGN KEY (receta_id) REFERENCES recetas(id) ON DELETE CASCADE,
+  CHECK (
+    (alimento_id IS NOT NULL AND receta_id IS NULL) OR
+    (alimento_id IS NULL AND receta_id IS NOT NULL)
+  )
+);
