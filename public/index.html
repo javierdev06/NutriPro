@@ -8,46 +8,196 @@
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/dashboard.css">
   <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#111827">
+  <meta name="theme-color" content="#111827">
+  <script src="js/vendor/chart.js"></script>
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.4.0/uicons-solid-rounded/css/uicons-solid-rounded.css">
 </head>
 <body>
-  <div class="pagina pagina-ancha">
-    <header class="encabezado">
-      <h1 id="saludo-usuario">NutriPro</h1>
-    </header>
+  <div class="app-layout">
+    <div id="overlay-sidebar" class="overlay-sidebar"></div>
 
-    <nav class="nav-principal">
-        <a href="pages/perfil.html">Perfil</a>
-        <a href="pages/objetivos.html">Objetivos</a>
-        <a href="pages/alimentos.html">Alimentos</a>
-        <a href="pages/recetas.html">Recetas</a>
-        <a href="pages/calendario.html">Calendario</a>
-        <a href="pages/inventario.html">Inventario</a>
-        <a href="pages/compras.html">Compras</a>
-        <a href="pages/peso.html">Peso</a>
-        <a href="pages/recordatorios.html">Recordatorios</a>
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <span class="icono-logo"><i class="fi fi-sr-leaf"></i></span>
+        NutriPro
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="index.html" class="activo"><i class="fi fi-sr-home"></i> Dashboard</a>
+        <a href="pages/calendario.html"><i class="fi fi-sr-calendar"></i> Plan semanal</a>
+        <a href="pages/calendario.html"><i class="fi fi-sr-utensils"></i> Comidas</a>
+        <a href="pages/alimentos.html"><i class="fi fi-sr-salad"></i> Alimentos</a>
+        <a href="pages/recetas.html"><i class="fi fi-sr-book"></i> Recetas</a>
+        <a href="pages/compras.html"><i class="fi fi-sr-shopping-cart"></i> Lista de compras</a>
+        <a href="pages/inventario.html"><i class="fi fi-sr-box"></i> Inventario</a>
+        <a href="#" id="link-agua-sidebar"><i class="fi fi-sr-drop"></i> Agua</a>
+        <a href="pages/peso.html"><i class="fi fi-sr-chart-line-up"></i> Progreso</a>
+        <a href="pages/peso.html"><i class="fi fi-sr-clock"></i> Historial</a>
+        <a href="pages/recordatorios.html"><i class="fi fi-sr-bell"></i> Recordatorios</a>
+        <a href="pages/objetivos.html"><i class="fi fi-sr-settings"></i> Ajustes</a>
+      </nav>
+
+      <div class="sidebar-objetivo">
+        <div class="etiqueta">Objetivo actual</div>
+        <div class="valor" id="sidebar-objetivo-nombre">—</div>
+        <div class="etiqueta">Calorias objetivo</div>
+        <div class="valor" id="sidebar-objetivo-calorias">—</div>
+      </div>
+
+      <div class="sidebar-perfil">
+        <div class="avatar" id="sidebar-avatar">J</div>
+        <div class="texto-perfil">
+          <span class="nombre" id="sidebar-nombre">Mi Perfil</span>
+          <a href="pages/perfil.html" class="link">Ver y editar perfil</a>
+        </div>
+      </div>
+    </aside>
+
+    <main class="contenido-principal">
+      <div class="barra-superior">
+        <div>
+          <button class="btn-menu-movil" id="btn-menu-movil"><i class="fi fi-sr-menu-burger"></i></button>
+          <h1 id="saludo-usuario">¡Hola! 👋</h1>
+          <div class="subtitulo">Resumen de tu dia</div>
+        </div>
+        <div class="acciones-superiores">
+          <span class="pill-fecha" id="pill-fecha"></span>
+          <button class="btn-campana"><i class="fi fi-sr-bell"></i></button>
+          <div class="avatar-topbar" id="avatar-topbar">J</div>
+        </div>
+      </div>
+
+      <div class="fila-stats" id="fila-stats"></div>
+
+      <div class="fila-dos-col">
+        <div class="tarjeta card-macros-donut" style="padding:1.2rem;">
+          <div class="card-titulo"><i class="fi fi-sr-chart-pie-alt"></i> Distribucion de macronutrientes</div>
+          <div class="card-donut">
+            <canvas id="donut-macros" width="140" height="140"></canvas>
+            <div class="leyenda-macros" id="leyenda-macros"></div>
+          </div>
+        </div>
+
+        <div class="tarjeta card-proxima" style="padding:1.2rem;">
+          <div class="card-titulo" style="justify-content:space-between;">
+            <span><i class="fi fi-sr-utensils"></i> Proxima comida</span>
+            <span class="badge-hora" id="badge-hora-proxima"></span>
+          </div>
+          <img id="img-proxima-comida" class="proxima-comida-img" src="" alt="">
+          <div class="proxima-comida-info">
+            <div>
+              <strong id="nombre-proxima-comida">—</strong>
+              <ul id="lista-proxima-comida"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-comidas-hoy card-comidas-hoy-orden">
+        <div class="card-titulo">
+          <span>Comidas de hoy</span>
+          <a href="pages/calendario.html">Ver todas</a>
+        </div>
+        <div class="fila-comidas-hoy" id="fila-comidas-hoy"></div>
+      </div>
+
+      <div class="grid-inferior-principal">
+        <div class="card-simple card-actividad">
+          <div class="card-titulo"><i class="fi fi-sr-dumbbell"></i> Actividad fisica de hoy</div>
+          <div class="form-inline-actividad">
+            <input type="text" id="actividad-nombre" placeholder="Ej: Entrenamiento de fuerza">
+            <input type="number" id="actividad-duracion" placeholder="Min">
+            <input type="number" id="actividad-calorias" placeholder="Kcal">
+            <button class="boton-secundario" id="btn-agregar-actividad" style="padding:0.5rem 0.9rem;">Agregar</button>
+          </div>
+          <div class="lista-actividades-hoy" id="lista-actividades-hoy"></div>
+        </div>
+
+        <div class="card-simple card-notas">
+          <div class="card-titulo" style="justify-content:space-between;">
+            <span><i class="fi fi-sr-note"></i> Notas del dia</span>
+          </div>
+          <textarea class="nota-textarea" id="nota-dia" placeholder="Escribe como te sientes hoy..."></textarea>
+          <button class="boton-principal" id="btn-guardar-nota" style="margin-top:0.6rem; width:100%;">Guardar nota</button>
+        </div>
+
+        <div class="card-anillo card-objetivo">
+          <div class="card-titulo"><i class="fi fi-sr-target"></i> Objetivo</div>
+          <div class="card-anillo-cuerpo">
+            <div class="anillo-valores">
+              <span id="objetivo-nombre-grande">—</span>
+              <strong id="objetivo-tiempo">—</strong>
+            </div>
+            <canvas id="anillo-objetivo" width="80" height="80"></canvas>
+          </div>
+        </div>
+
+        <div class="card-anillo card-agua">
+          <div class="card-titulo"><i class="fi fi-sr-drop"></i> Agua</div>
+          <div class="card-anillo-cuerpo">
+            <div class="anillo-valores">
+              <span>Meta diaria</span>
+              <strong id="agua-total-litros">—</strong>
+            </div>
+            <canvas id="anillo-agua" width="80" height="80"></canvas>
+          </div>
+          <div class="vasos-agua" id="vasos-agua"></div>
+        </div>
+
+        <div class="card-anillo card-peso-mini card-peso">
+          <div class="card-titulo"><i class="fi fi-sr-chart-line-up"></i> Progreso de peso</div>
+          <span class="peso-actual-grande" id="peso-actual-grande">—</span>
+          <span class="peso-delta" id="peso-delta"></span>
+          <canvas id="grafico-peso-mini"></canvas>
+        </div>
+      </div>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="index.html" class="activo">
+        <i class="fi fi-sr-home"></i>Dashboard
+      </a>
+      <a href="pages/calendario.html">
+        <i class="fi fi-sr-calendar"></i>Plan semanal
+      </a>
+      <a href="pages/calendario.html">
+        <i class="fi fi-sr-utensils"></i>Comidas
+      </a>
+      <a href="pages/alimentos.html">
+        <i class="fi fi-sr-salad"></i>Alimentos
+      </a>
+      <a href="#" id="btn-mas-movil">
+        <i class="fi fi-sr-menu-dots"></i>Mas
+      </a>
     </nav>
-
-    <div id="contenido-dashboard" class="grid-dashboard">
-      <div class="tarjeta-dashboard" id="tarjeta-calorias"></div>
-      <div class="tarjeta-dashboard tarjeta-macro" id="tarjeta-macros"></div>
-      <div class="tarjeta-dashboard" id="tarjeta-agua"></div>
-      <div class="tarjeta-dashboard tarjeta-proxima-comida" id="tarjeta-proxima-comida"></div>
-    </div>
   </div>
 
-    <script src="js/utils.js"></script>
-    <script src="js/db.js"></script>
-    <script src="js/calculos.js"></script>
-    <script src="js/api.js"></script>
-    <script src="js/pages/dashboard.js"></script>
-    <script src="js/notificaciones.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
-            .then(() => console.log('Service Worker registrado correctamente'))
-            .catch((error) => console.error('Error al registrar Service Worker:', error));
-        }
-</script>
+  <script src="js/db.js"></script>
+  <script src="js/calculos.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/pages/dashboard.js"></script>
+  <script src="js/notificaciones.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+        .then(() => console.log('Service Worker registrado correctamente'))
+        .catch((error) => console.error('Error al registrar Service Worker:', error));
+    }
+
+    function abrirMenuMovil() {
+      document.getElementById('sidebar').classList.add('abierto');
+      document.getElementById('overlay-sidebar').classList.add('activo');
+    }
+    document.getElementById('btn-menu-movil').addEventListener('click', abrirMenuMovil);
+    document.getElementById('btn-mas-movil').addEventListener('click', (e) => {
+      e.preventDefault();
+      abrirMenuMovil();
+    });
+    document.getElementById('overlay-sidebar').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.remove('abierto');
+      document.getElementById('overlay-sidebar').classList.remove('activo');
+    });
+  </script>
 </body>
 </html>

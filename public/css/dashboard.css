@@ -1,145 +1,770 @@
-.grid-dashboard {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
-  margin-top: 1.5rem;
+/* --- Layout general con sidebar --- */
+
+.app-layout {
+  display: flex;
+  min-height: 100vh;
 }
 
-.tarjeta-dashboard {
-  background: linear-gradient(160deg, var(--fondo-tarjeta), #14161c);
-  border: 1px solid var(--borde);
-  border-radius: 16px;
-  padding: 1.3rem;
+.sidebar {
+  width: 230px;
+  flex-shrink: 0;
+  background-color: var(--fondo-tarjeta);
+  border-right: 1px solid var(--borde);
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  padding: 1.2rem 1rem;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  overflow-y: auto;
+  z-index: 50;
+  transition: transform 0.25s ease;
 }
 
-.tarjeta-dashboard h3 {
-  font-size: 0.8rem;
-  color: var(--texto-secundario);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  font-weight: 700;
-}
-
-.tarjeta-dashboard .valor-grande {
-  font-size: 2rem;
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   font-weight: 800;
-  background: linear-gradient(90deg, var(--verde-claro), var(--naranjo-claro));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  font-size: 1.2rem;
+  color: var(--texto);
+  margin-bottom: 1.5rem;
+  padding: 0 0.3rem;
 }
 
-.tarjeta-dashboard .valor-secundario {
-  font-size: 0.85rem;
-  color: var(--texto-secundario);
+.sidebar-logo .icono-logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--verde), var(--naranjo));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
 }
 
-.barra-progreso {
-  width: 100%;
-  height: 10px;
-  background-color: var(--fondo-input);
-  border-radius: 6px;
-  overflow: hidden;
-  margin-top: 0.3rem;
-}
-
-.barra-progreso-relleno {
-  height: 100%;
-  background: linear-gradient(90deg, var(--verde), var(--naranjo));
-  border-radius: 6px;
-  transition: width 0.4s ease;
-}
-
-.tarjeta-macro {
+.sidebar-nav {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.25rem;
+  flex: 1;
 }
 
-.fila-macro {
+.sidebar-nav a {
   display: flex;
-  justify-content: space-between;
-  font-size: 0.85rem;
-  color: var(--texto);
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.65rem 0.8rem;
+  border-radius: 10px;
+  color: var(--texto-secundario);
+  font-size: 0.9rem;
   font-weight: 600;
 }
 
-.botones-agua {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-
-.botones-agua button {
-  flex: 1;
+.sidebar-nav a:hover {
   background-color: var(--fondo-input);
-  border: 1px solid var(--borde);
-  color: var(--naranjo-claro);
-  border-radius: 10px;
-  padding: 0.5rem;
-  cursor: pointer;
+  color: var(--texto);
+}
+
+.sidebar-nav a.activo {
+  background: linear-gradient(90deg, rgba(34,197,94,0.18), rgba(34,197,94,0.05));
+  color: var(--verde-claro);
+  border: 1px solid rgba(34,197,94,0.3);
+}
+
+.sidebar-objetivo {
+  background-color: var(--fondo-input);
+  border-radius: 12px;
+  padding: 0.9rem;
+  margin-top: 1rem;
   font-size: 0.8rem;
+}
+
+.sidebar-objetivo .etiqueta {
+  color: var(--texto-secundario);
+  margin-bottom: 0.2rem;
+}
+
+.sidebar-objetivo .valor {
+  color: var(--verde-claro);
   font-weight: 700;
-  transition: border-color 0.2s ease;
+  font-size: 0.95rem;
+  margin-bottom: 0.6rem;
 }
 
-.botones-agua button:hover {
-  border-color: var(--naranjo);
-}
-
-.tarjeta-proxima-comida {
-  grid-column: span 2;
-}
-
-/* --- Navegacion superior tipo app --- */
-
-.nav-principal {
+.sidebar-perfil {
   display: flex;
+  align-items: center;
   gap: 0.6rem;
+  padding: 0.7rem 0.4rem;
+  margin-top: 0.8rem;
+  border-top: 1px solid var(--borde);
+}
+
+.sidebar-perfil .avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--verde), var(--naranjo));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #0f1115;
+}
+
+.sidebar-perfil .texto-perfil span {
+  display: block;
+  font-size: 0.8rem;
+}
+
+.sidebar-perfil .texto-perfil .nombre {
+  color: var(--texto);
+  font-weight: 700;
+}
+
+.sidebar-perfil .texto-perfil .link {
+  color: var(--texto-secundario);
+  font-size: 0.72rem;
+}
+
+.btn-menu-movil {
+  display: none;
+  background: var(--fondo-tarjeta);
+  border: 1px solid var(--borde);
+  color: var(--texto);
+  border-radius: 10px;
+  width: 40px;
+  height: 40px;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.overlay-sidebar {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 40;
+}
+
+.contenido-principal {
+  margin-left: 230px;
+  flex: 1;
+  padding: 1.5rem 1.75rem;
+  min-width: 0;
+}
+
+/* --- Barra superior --- */
+
+.barra-superior {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
   flex-wrap: wrap;
+}
+
+.barra-superior h1 {
+  font-size: 1.5rem;
+  margin-bottom: 0.1rem;
+  background: none;
+  -webkit-text-fill-color: initial;
+  color: var(--texto);
+}
+
+.barra-superior .subtitulo {
+  color: var(--texto-secundario);
+  font-size: 0.85rem;
+}
+
+.acciones-superiores {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.pill-fecha {
+  background-color: var(--fondo-tarjeta);
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  font-size: 0.82rem;
+  color: var(--texto);
+}
+
+.btn-campana {
+  background-color: var(--fondo-tarjeta);
+  border: 1px solid var(--borde);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+/* --- Tarjetas de estadisticas superiores --- */
+
+.fila-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.9rem;
   margin-bottom: 1.2rem;
 }
 
-.nav-principal a {
-  background-color: var(--fondo-tarjeta);
+.stat-card {
+  background: linear-gradient(160deg, var(--fondo-tarjeta), #14161c);
   border: 1px solid var(--borde);
-  color: var(--texto);
-  padding: 0.5rem 1rem;
-  border-radius: 999px;
+  border-radius: 16px;
+  padding: 1.1rem;
+}
+
+.stat-card .stat-encabezado {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+  font-size: 0.8rem;
+  color: var(--texto-secundario);
+  font-weight: 700;
+}
+
+.stat-card .stat-icono {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 0.85rem;
-  font-weight: 600;
-  transition: border-color 0.2s ease, color 0.2s ease;
 }
 
-.nav-principal a:hover {
-  border-color: var(--verde);
+.stat-icono.verde { background: rgba(34,197,94,0.18); }
+.stat-icono.azul { background: rgba(59,130,246,0.18); }
+.stat-icono.naranjo { background: rgba(251,146,60,0.18); }
+
+.stat-card .stat-valor {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--texto);
+  margin-bottom: 0.5rem;
+}
+
+.stat-card .stat-valor small {
+  font-size: 0.75rem;
+  color: var(--texto-secundario);
+  font-weight: 500;
+}
+
+.stat-card .stat-porcentaje {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: var(--texto-secundario);
+  margin-top: 0.3rem;
+}
+
+/* --- Fila de dos columnas: macros + proxima comida --- */
+
+.fila-dos-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.card-titulo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+.card-donut {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.card-donut canvas {
+  max-width: 140px;
+  max-height: 140px;
+}
+
+.leyenda-macros {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  font-size: 0.8rem;
+}
+
+.leyenda-macros .fila-leyenda strong {
+  display: block;
+  font-size: 0.95rem;
+}
+
+.proxima-comida-img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 0.8rem;
+  background-color: var(--fondo-input);
+}
+
+.proxima-comida-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.proxima-comida-info ul {
+  list-style: none;
+  font-size: 0.8rem;
+  color: var(--texto-secundario);
+  margin-top: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.badge-hora {
+  background: rgba(34,197,94,0.15);
   color: var(--verde-claro);
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.72rem;
+  font-weight: 700;
 }
 
-@media (max-width: 640px) {
-  .grid-dashboard {
+/* --- Comidas de hoy --- */
+
+.card-comidas-hoy {
+  background: linear-gradient(160deg, var(--fondo-tarjeta), #14161c);
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  padding: 1.2rem;
+  margin-bottom: 1.2rem;
+}
+
+.card-comidas-hoy .card-titulo {
+  justify-content: space-between;
+}
+
+.card-comidas-hoy .card-titulo a {
+  color: var(--naranjo-claro);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.fila-comidas-hoy {
+  display: flex;
+  gap: 0.9rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.mini-comida {
+  min-width: 140px;
+  background-color: var(--fondo-input);
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  padding: 0.7rem;
+  text-align: center;
+}
+
+.mini-comida.actual {
+  border-color: var(--verde);
+}
+
+.mini-comida .mini-comida-header {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--texto);
+}
+
+.mini-comida .mini-comida-hora {
+  font-size: 0.68rem;
+  color: var(--texto-secundario);
+  margin-bottom: 0.5rem;
+}
+
+.mini-comida img,
+.mini-comida .placeholder-img {
+  width: 100%;
+  height: 75px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 0.5rem;
+  background-color: var(--fondo-tarjeta);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+}
+
+.mini-comida .mini-comida-nombre {
+  font-size: 0.72rem;
+  color: var(--texto-secundario);
+  margin-bottom: 0.3rem;
+  min-height: 1.6em;
+}
+
+.mini-comida .mini-comida-kcal {
+  font-size: 0.72rem;
+  color: var(--texto);
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.mini-comida .estado-punto {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--borde);
+  margin: 0 auto;
+}
+
+.mini-comida .estado-punto.completo {
+  background-color: var(--verde);
+  border-color: var(--verde);
+}
+
+/* --- Columna derecha --- */
+
+.columna-derecha {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.card-anillo {
+  background: linear-gradient(160deg, var(--fondo-tarjeta), #14161c);
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.card-anillo-cuerpo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.card-anillo-cuerpo .anillo-valores {
+  font-size: 0.8rem;
+  color: var(--texto-secundario);
+}
+
+.card-anillo-cuerpo .anillo-valores strong {
+  display: block;
+  color: var(--texto);
+  font-size: 1.1rem;
+}
+
+.vasos-agua {
+  display: flex;
+  gap: 0.35rem;
+  margin-top: 0.4rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.vaso {
+  font-size: 1.1rem;
+  opacity: 0.25;
+}
+
+.vaso.lleno {
+  opacity: 1;
+}
+
+.btn-agregar-vaso {
+  background-color: var(--fondo-input);
+  border: 1px solid var(--borde);
+  color: var(--verde-claro);
+  border-radius: 8px;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.card-peso-mini canvas {
+  max-height: 130px;
+}
+
+.card-peso-mini .peso-actual-grande {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--texto);
+}
+
+.card-peso-mini .peso-delta {
+  font-size: 0.78rem;
+  color: var(--verde-claro);
+  font-weight: 700;
+  margin-left: 0.4rem;
+}
+
+/* --- Actividad y notas --- */
+
+.fila-inferior {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1.2rem;
+}
+
+.card-simple {
+  background: linear-gradient(160deg, var(--fondo-tarjeta), #14161c);
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  padding: 1.2rem;
+}
+
+.form-inline-actividad {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+
+.form-inline-actividad input {
+  background-color: var(--fondo-input);
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+  color: var(--texto);
+  font-size: 0.85rem;
+  flex: 1;
+  min-width: 90px;
+}
+
+.lista-actividades-hoy {
+  margin-top: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.item-actividad {
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--fondo-input);
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.82rem;
+}
+
+.nota-textarea {
+  width: 100%;
+  min-height: 90px;
+  background-color: var(--fondo-input);
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 0.7rem;
+  color: var(--texto);
+  font-family: inherit;
+  font-size: 0.85rem;
+  resize: vertical;
+}
+
+/* --- Responsive: sidebar como drawer en celular --- */
+
+@media (max-width: 900px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .sidebar.abierto {
+    transform: translateX(0);
+  }
+
+  .overlay-sidebar.activo {
+    display: block;
+  }
+
+  .contenido-principal {
+    margin-left: 0;
+    padding: 1.1rem;
+  }
+
+  .btn-menu-movil {
+    display: block;
+  }
+
+  .fila-stats {
     grid-template-columns: 1fr 1fr;
   }
 
-  .tarjeta-proxima-comida {
-    grid-column: span 2;
-  }
-
-  .tarjeta-dashboard .valor-grande {
-    font-size: 1.5rem;
+  .fila-dos-col,
+  .fila-inferior {
+    grid-template-columns: 1fr;
   }
 }
 
-@media (max-width: 400px) {
-  .grid-dashboard {
-    grid-template-columns: 1fr;
+@media (max-width: 480px) {
+  .fila-stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
   }
 
-  .tarjeta-proxima-comida {
-    grid-column: span 1;
+  .stat-card {
+    padding: 0.85rem;
   }
+
+  .stat-card .stat-valor {
+    font-size: 1.05rem;
+  }
+
+  .card-donut {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .card-donut canvas {
+    align-self: center;
+  }
+
+  .mini-comida {
+    min-width: 120px;
+  }
+
+  .form-inline-actividad input {
+    flex: 1 1 100%;
+  }
+
+  .barra-superior {
+    align-items: center;
+  }
+
+  .barra-superior h1 {
+    font-size: 1.25rem;
+  }
+
+  .contenido-principal {
+    padding: 1rem 0.85rem;
+  }
+}
+.grid-inferior-principal {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 1rem;
+}
+
+.card-actividad { grid-column: 1; grid-row: 1; }
+.card-notas { grid-column: 1; grid-row: 2; }
+.card-objetivo { grid-column: 2; grid-row: 1; }
+.card-agua { grid-column: 2; grid-row: 2; }
+.card-peso { grid-column: 2; grid-row: 3; }
+
+@media (max-width: 900px) {
+  .grid-inferior-principal {
+    display: contents;
+  }
+}
+/* --- Avatar en la barra superior --- */
+
+.avatar-topbar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--verde), var(--naranjo));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #0f1115;
+}
+
+/* --- Barra de navegacion inferior (solo celular) --- */
+
+.bottom-nav {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .btn-menu-movil {
+    display: none;
+  }
+
+  .bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background-color: var(--fondo-tarjeta);
+    border-top: 1px solid var(--borde);
+    padding: 0.5rem 0.2rem calc(0.5rem + env(safe-area-inset-bottom));
+    z-index: 60;
+  }
+
+  .bottom-nav a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    color: var(--texto-secundario);
+    font-size: 0.65rem;
+    font-weight: 600;
+  }
+
+  .bottom-nav a span {
+    font-size: 1.15rem;
+  }
+
+  .bottom-nav a.activo {
+    color: var(--verde-claro);
+  }
+
+  /* --- Reordenamiento de tarjetas en una sola columna --- */
+
+  .contenido-principal {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-bottom: 5.5rem;
+  }
+
+  .fila-dos-col {
+    display: contents;
+  }
+
+  .fila-stats { order: 1; }
+  .card-macros-donut { order: 2; }
+  .card-proxima { order: 3; }
+  .card-agua { order: 4; }
+  .card-objetivo { order: 5; }
+  .card-comidas-hoy-orden { order: 6; }
+  .card-peso { order: 7; }
+  .card-actividad { order: 8; }
+  .card-notas { order: 9; }
+}
+.sidebar-nav a i,
+.card-titulo i,
+.stat-icono i,
+.btn-campana i,
+.btn-menu-movil i,
+.vaso i,
+.placeholder-img i,
+.bottom-nav a i {
+  font-size: 1em;
+}
+
+.icono-logo i {
+  font-size: 1.1rem;
+  color: white;
+}
+
+.sidebar-nav a {
+  gap: 0.6rem;
 }

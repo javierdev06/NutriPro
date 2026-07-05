@@ -1,5 +1,5 @@
 const NOMBRE_DB = 'NutriProDB';
-const VERSION_DB = 1;
+const VERSION_DB = 2;
 
 function abrirDB() {
   return new Promise((resolve, reject) => {
@@ -59,6 +59,14 @@ function abrirDB() {
       if (!db.objectStoreNames.contains('recordatorios')) {
         const store = db.createObjectStore('recordatorios', { keyPath: 'id', autoIncrement: true });
         store.createIndex('usuario_tipo', ['usuario_id', 'tipo'], { unique: true });
+      }
+      if (!db.objectStoreNames.contains('actividades')) {
+        const store = db.createObjectStore('actividades', { keyPath: 'id', autoIncrement: true });
+        store.createIndex('usuario_fecha', ['usuario_id', 'fecha']);
+      }
+      if (!db.objectStoreNames.contains('notas')) {
+        const store = db.createObjectStore('notas', { keyPath: 'id', autoIncrement: true });
+        store.createIndex('usuario_fecha', ['usuario_id', 'fecha'], { unique: true });
       }
     };
 

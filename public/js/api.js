@@ -570,3 +570,32 @@ async function sustituirItemComida(itemId, alimentoOriginalId, nuevoAlimentoId, 
 
   return dbGuardar('comida_items', item);
 }
+// --- Actividad fisica ---
+
+async function obtenerActividadesDia(usuarioId, fechaISO) {
+  return dbObtenerPorIndice('actividades', 'usuario_fecha', [Number(usuarioId), fechaISO]);
+}
+
+async function crearActividad(usuarioId, fechaISO, datos) {
+  return dbAgregar('actividades', {
+    usuario_id: Number(usuarioId),
+    fecha: fechaISO,
+    nombre: datos.nombre,
+    duracion_min: datos.duracion_min,
+    calorias_quemadas: datos.calorias_quemadas
+  });
+}
+
+// --- Notas del dia ---
+
+async function obtenerNotaDia(usuarioId, fechaISO) {
+  const notas = await dbObtenerPorIndice('notas', 'usuario_fecha', [Number(usuarioId), fechaISO]);
+  return notas[0] || null;
+}
+
+async function guardarNotaDia(usuarioId, fechaISO, texto) {
+  const existente = await obtenerNotaDia(usuarioId, fechaISO);
+  const nota = { usuario_id: Number(usuarioId), fecha: fechaISO, texto };
+  if (existente) nota.id = existente.id;
+  return dbGuardar('notas', nota);
+}
