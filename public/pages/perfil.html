@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NutriPro — Perfil</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+</head>
+<body>
+  <div class="pagina">
+    <header class="encabezado">
+      <h1>Mi Perfil</h1>
+    </header>
+
+    <main class="contenido">
+      <form id="form-perfil" class="tarjeta">
+        <div class="campo">
+          <label for="nombre">Nombre</label>
+          <input type="text" id="nombre" required>
+        </div>
+
+        <div class="campo">
+          <label for="edad">Edad</label>
+          <input type="number" id="edad" min="10" max="100" required>
+        </div>
+
+        <div class="campo">
+          <label for="sexo">Sexo</label>
+          <select id="sexo" required>
+            <option value="">Selecciona una opcion</option>
+            <option value="masculino">Masculino</option>
+            <option value="femenino">Femenino</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="altura">Altura (cm)</label>
+          <input type="number" id="altura" min="100" max="250" required>
+        </div>
+
+        <div class="campo">
+          <label for="peso">Peso actual (kg)</label>
+          <input type="number" id="peso" step="0.1" min="30" max="300" required>
+        </div>
+
+        <div class="campo">
+          <label for="actividad">Nivel de actividad fisica</label>
+          <select id="actividad" required>
+            <option value="">Selecciona una opcion</option>
+            <option value="sedentario">Sedentario (poco o nada de ejercicio)</option>
+            <option value="ligero">Ligero (1-3 dias por semana)</option>
+            <option value="moderado">Moderado (3-5 dias por semana)</option>
+            <option value="activo">Activo (6-7 dias por semana)</option>
+            <option value="muy_activo">Muy activo (entrenamiento intenso diario)</option>
+          </select>
+        </div>
+
+        <button type="submit" class="boton-principal">Guardar perfil</button>
+      </form>
+
+      <p id="mensaje-perfil" class="mensaje"></p>
+    </main>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/pages/perfil.js"></script>
+</body>
+</html>
