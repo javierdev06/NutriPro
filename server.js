@@ -6,6 +6,8 @@ import db from './src/db/database.js';
 import usuarioRoutes from './src/routes/usuarioRoutes.js';
 import perfilRoutes from './src/routes/perfilRoutes.js';
 import objetivoRoutes from './src/routes/objetivoRoutes.js';
+import categoriaRoutes from './src/routes/categoriaRoutes.js';
+import alimentoRoutes from './src/routes/alimentoRoutes.js';
 
 dotenv.config();
 
@@ -22,6 +24,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/usuario', usuarioRoutes);
 app.use('/api/perfil', perfilRoutes);
 app.use('/api/objetivo', objetivoRoutes);
+app.use('/api/categorias', categoriaRoutes);
+app.use('/api/alimentos', alimentoRoutes);
 
 // Ruta de prueba de la API
 app.get('/api/health', (req, res) => {
