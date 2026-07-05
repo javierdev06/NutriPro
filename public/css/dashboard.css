@@ -12,10 +12,13 @@
   border-right: 1px solid var(--borde);
   display: flex;
   flex-direction: column;
-  padding: 1.2rem 1rem;
+  padding: 1rem 1rem calc(0.5rem + env(safe-area-inset-bottom));
   position: fixed;
   top: 0; left: 0; bottom: 0;
+  height: 100vh;
+  height: 100dvh;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   z-index: 50;
   transition: transform 0.25s ease;
 }
@@ -25,9 +28,9 @@
   align-items: center;
   gap: 0.5rem;
   font-weight: 800;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: var(--texto);
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.8rem;
   padding: 0 0.3rem;
 }
 
@@ -46,17 +49,16 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  flex: 1;
 }
 
 .sidebar-nav a {
   display: flex;
   align-items: center;
-  gap: 0.7rem;
-  padding: 0.65rem 0.8rem;
+  gap: 0.6rem;
+  padding: 0.45rem 0.7rem;
   border-radius: 10px;
   color: var(--texto-secundario);
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   font-weight: 600;
 }
 
@@ -74,11 +76,10 @@
 .sidebar-objetivo {
   background-color: var(--fondo-input);
   border-radius: 12px;
-  padding: 0.9rem;
-  margin-top: 1rem;
-  font-size: 0.8rem;
-}
-
+  padding: 0.6rem 0.8rem;
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+}   
 .sidebar-objetivo .etiqueta {
   color: var(--texto-secundario);
   margin-bottom: 0.2rem;
@@ -87,16 +88,15 @@
 .sidebar-objetivo .valor {
   color: var(--verde-claro);
   font-weight: 700;
-  font-size: 0.95rem;
-  margin-bottom: 0.6rem;
+  font-size: 0.85rem;
+  margin-bottom: 0.3rem;
 }
-
 .sidebar-perfil {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  padding: 0.7rem 0.4rem;
-  margin-top: 0.8rem;
+  padding: 0.5rem 0.4rem 0.2rem;
+  margin-top: 0.4rem;
   border-top: 1px solid var(--borde);
 }
 
@@ -767,4 +767,13 @@
 
 .sidebar-nav a {
   gap: 0.6rem;
+}
+@media (max-width: 900px) {
+  .sidebar-objetivo {
+    margin-top: 0.5rem;
+  }
+
+  .sidebar-perfil {
+    margin-bottom: 1rem;
+  }
 }
