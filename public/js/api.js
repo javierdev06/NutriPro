@@ -194,3 +194,18 @@ async function crearRegistroPeso(usuarioId, datos) {
 async function eliminarRegistroPeso(id) {
   await fetch(`/api/peso/${id}`, { method: 'DELETE' });
 }
+// --- Recordatorios ---
+
+async function obtenerRecordatorios(usuarioId) {
+  const respuesta = await fetch(`/api/recordatorios/${usuarioId}`);
+  return respuesta.json();
+}
+
+async function guardarRecordatorio(usuarioId, tipo, hora, activo) {
+  const respuesta = await fetch(`/api/recordatorios/${usuarioId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ tipo, hora, activo })
+  });
+  return respuesta.json();
+}

@@ -13,6 +13,7 @@ import calendarioRoutes from './src/routes/calendarioRoutes.js';
 import aguaRoutes from './src/routes/aguaRoutes.js';
 import inventarioRoutes from './src/routes/inventarioRoutes.js';
 import pesoRoutes from './src/routes/pesoRoutes.js';
+import recordatorioRoutes from './src/routes/recordatorioRoutes.js';
 
 dotenv.config();
 
@@ -36,6 +37,7 @@ app.use('/api/calendario', calendarioRoutes);
 app.use('/api/agua', aguaRoutes);
 app.use('/api/inventario', inventarioRoutes);
 app.use('/api/peso', pesoRoutes);
+app.use('/api/recordatorios', recordatorioRoutes);
 
 // Ruta de prueba de la API
 app.get('/api/health', (req, res) => {

@@ -112,3 +112,15 @@ CREATE TABLE IF NOT EXISTS registro_peso (
   fecha TEXT NOT NULL DEFAULT (datetime('now')),
   FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
+-- Recordatorios configurables (horarios de comidas y agua)
+CREATE TABLE IF NOT EXISTS recordatorios (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  usuario_id INTEGER NOT NULL,
+  tipo TEXT NOT NULL CHECK (
+    tipo IN ('desayuno', 'colacion', 'almuerzo', 'merienda', 'once', 'snack_nocturno', 'agua')
+  ),
+  hora TEXT NOT NULL,
+  activo INTEGER NOT NULL DEFAULT 1,
+  UNIQUE(usuario_id, tipo),
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);

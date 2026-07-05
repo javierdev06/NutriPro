@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NutriPro — Recordatorios</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+</head>
+<body>
+  <div class="pagina">
+    <header class="encabezado">
+      <h1>Recordatorios</h1>
+    </header>
+
+    <main class="contenido">
+      <p id="mensaje-permiso" class="mensaje"></p>
+      <button id="btn-activar-notificaciones" class="boton-secundario">
+        Activar notificaciones del navegador
+      </button>
+
+      <div id="lista-recordatorios" class="tarjeta" style="margin-top:1rem;"></div>
+    </main>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/pages/recordatorios.js"></script>
+</body>
+</html>
