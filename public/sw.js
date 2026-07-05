@@ -1,4 +1,4 @@
-const NOMBRE_CACHE = 'nutripro-cache-v1';
+const NOMBRE_CACHE = 'nutripro-cache-v2';
 
 const ARCHIVOS_A_CACHEAR = [
   '/',

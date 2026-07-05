@@ -26,14 +26,14 @@ async function inicializarDashboard() {
     return;
   }
 
-  document.getElementById('saludo-usuario').textContent = `¡Hola, ${usuario.nombre}! 👋`;
+  document.getElementById('saludo-usuario').innerHTML = `¡Hola, ${usuario.nombre}! <i class="fi fi-sr-hand-wave"></i>`;
   document.getElementById('sidebar-nombre').textContent = usuario.nombre;
   document.getElementById('sidebar-avatar').textContent = usuario.nombre.charAt(0).toUpperCase();
   document.getElementById('avatar-topbar').textContent = usuario.nombre.charAt(0).toUpperCase();
 
   const hoy = new Date();
   const fechaISO = formatearFechaISO(hoy);
-  document.getElementById('pill-fecha').textContent = '📅 ' + hoy.toLocaleDateString('es-CL', {
+  document.getElementById('pill-fecha').innerHTML = '<i class="fi fi-sr-calendar"></i> ' + hoy.toLocaleDateString('es-CL', {
     weekday: 'long', day: 'numeric', month: 'long'
   });
 
