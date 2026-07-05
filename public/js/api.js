@@ -175,3 +175,22 @@ async function obtenerNecesidadesSemana(usuarioId, inicioISO, finISO) {
   const respuesta = await fetch(`/api/inventario/${usuarioId}/necesidades?inicio=${inicioISO}&fin=${finISO}`);
   return respuesta.json();
 }
+// --- Peso ---
+
+async function obtenerHistorialPeso(usuarioId) {
+  const respuesta = await fetch(`/api/peso/${usuarioId}`);
+  return respuesta.json();
+}
+
+async function crearRegistroPeso(usuarioId, datos) {
+  const respuesta = await fetch(`/api/peso/${usuarioId}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(datos)
+  });
+  return respuesta.json();
+}
+
+async function eliminarRegistroPeso(id) {
+  await fetch(`/api/peso/${id}`, { method: 'DELETE' });
+}

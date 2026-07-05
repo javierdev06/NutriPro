@@ -102,3 +102,13 @@ CREATE TABLE IF NOT EXISTS inventario (
   FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
   FOREIGN KEY (alimento_id) REFERENCES alimentos(id) ON DELETE CASCADE
 );
+-- Registro historico de peso, grasa corporal y masa muscular
+CREATE TABLE IF NOT EXISTS registro_peso (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  usuario_id INTEGER NOT NULL,
+  peso_kg REAL NOT NULL,
+  porcentaje_grasa REAL,
+  masa_muscular_kg REAL,
+  fecha TEXT NOT NULL DEFAULT (datetime('now')),
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);

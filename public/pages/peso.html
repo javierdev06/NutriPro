@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NutriPro — Peso</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <script src="../js/vendor/chart.js"></script>
+</head>
+<body>
+  <div class="pagina">
+    <header class="encabezado">
+      <h1>Registro de Peso</h1>
+    </header>
+
+    <main class="contenido">
+      <form id="form-peso" class="tarjeta">
+        <div class="campo">
+          <label for="peso-kg">Peso (kg)</label>
+          <input type="number" id="peso-kg" step="0.1" required>
+        </div>
+
+        <div class="campo">
+          <label for="grasa-corporal">Porcentaje de grasa corporal (opcional)</label>
+          <input type="number" id="grasa-corporal" step="0.1">
+        </div>
+
+        <div class="campo">
+          <label for="masa-muscular">Masa muscular en kg (opcional)</label>
+          <input type="number" id="masa-muscular" step="0.1">
+        </div>
+
+        <button type="submit" class="boton-principal">Guardar registro</button>
+      </form>
+
+      <p id="mensaje-peso" class="mensaje"></p>
+
+      <div class="tarjeta">
+        <canvas id="grafico-peso"></canvas>
+      </div>
+
+      <div id="lista-registros-peso" class="lista-alimentos"></div>
+    </main>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/pages/peso.js"></script>
+</body>
+</html>

@@ -4,11 +4,12 @@
   "description": "Aplicacion personal de nutricion fitness",
   "type": "module",
   "scripts": {
-  "dev": "nodemon server.js",
-  "start": "node server.js",
-  "seed": "node src/db/seed.js"
-},
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "seed": "node src/db/seed.js"
+  },
   "dependencies": {
+    "chart.js": "^4.5.1",
     "dotenv": "^16.4.5",
     "express": "^4.19.2"
   },
