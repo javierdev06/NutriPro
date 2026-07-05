@@ -127,3 +127,18 @@ async function agregarItemComida(comidaId, datos) {
 async function eliminarItemComida(itemId) {
   await fetch(`/api/calendario/items/${itemId}`, { method: 'DELETE' });
 }
+// --- Agua ---
+
+async function obtenerAgua(usuarioId, fechaISO) {
+  const respuesta = await fetch(`/api/agua/${usuarioId}/${fechaISO}`);
+  return respuesta.json();
+}
+
+async function agregarAgua(usuarioId, fechaISO, mililitros) {
+  const respuesta = await fetch(`/api/agua/${usuarioId}/${fechaISO}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ mililitros })
+  });
+  return respuesta.json();
+}

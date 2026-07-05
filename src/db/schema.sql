@@ -80,3 +80,14 @@ CREATE TABLE IF NOT EXISTS comida_items (
     (alimento_id IS NULL AND receta_id IS NOT NULL)
   )
 );
+
+-- Registro diario de agua (un registro por dia)
+CREATE TABLE IF NOT EXISTS registro_agua (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  usuario_id INTEGER NOT NULL,
+  fecha TEXT NOT NULL,
+  mililitros INTEGER NOT NULL DEFAULT 0,
+  meta_ml INTEGER NOT NULL DEFAULT 2000,
+  UNIQUE(usuario_id, fecha),
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);

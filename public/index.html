@@ -5,21 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NutriPro</title>
   <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
-  <div class="contenedor">
-    <h1>NutriPro</h1>
-    <p id="estado-backend">Conectando...</p>
-    <p><a href="pages/perfil.html" style="color:#4ade80;">Ir a mi perfil</a></p>
-    <p><a href="pages/objetivos.html" style="color:#4ade80;">Ir a mis objetivos</a></p>
-    <p><a href="pages/alimentos.html" style="color:#4ade80;">Ver alimentos</a></p>
-    <p><a href="pages/recetas.html" style="color:#4ade80;">Ver recetas</a></p>
-    <p><a href="pages/calendario.html" style="color:#4ade80;">Ver calendario</a></p>
+  <div class="pagina pagina-ancha">
+    <header class="encabezado">
+      <h1 id="saludo-usuario">NutriPro</h1>
+    </header>
+
+    <nav style="display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1rem;">
+      <a href="pages/perfil.html" style="color:#4ade80;">Perfil</a>
+      <a href="pages/objetivos.html" style="color:#4ade80;">Objetivos</a>
+      <a href="pages/alimentos.html" style="color:#4ade80;">Alimentos</a>
+      <a href="pages/recetas.html" style="color:#4ade80;">Recetas</a>
+      <a href="pages/calendario.html" style="color:#4ade80;">Calendario</a>
+    </nav>
+
+    <div id="contenido-dashboard" class="grid-dashboard">
+      <div class="tarjeta-dashboard" id="tarjeta-calorias"></div>
+      <div class="tarjeta-dashboard tarjeta-macro" id="tarjeta-macros"></div>
+      <div class="tarjeta-dashboard" id="tarjeta-agua"></div>
+      <div class="tarjeta-dashboard tarjeta-proxima-comida" id="tarjeta-proxima-comida"></div>
+    </div>
   </div>
 
+  <script src="js/utils.js"></script>
   <script src="js/api.js"></script>
-  <script>
-    verificarBackend();
-  </script>
+  <script src="js/pages/dashboard.js"></script>
 </body>
 </html>

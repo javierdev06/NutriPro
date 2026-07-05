@@ -1,0 +1,86 @@
+.grid-dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.tarjeta-dashboard {
+  background-color: #1f2937;
+  border-radius: 12px;
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tarjeta-dashboard h3 {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.tarjeta-dashboard .valor-grande {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #4ade80;
+}
+
+.tarjeta-dashboard .valor-secundario {
+  font-size: 0.85rem;
+  color: #d1d5db;
+}
+
+.barra-progreso {
+  width: 100%;
+  height: 8px;
+  background-color: #111827;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 0.3rem;
+}
+
+.barra-progreso-relleno {
+  height: 100%;
+  background-color: #4ade80;
+  transition: width 0.3s ease;
+}
+
+.tarjeta-macro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.fila-macro {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #d1d5db;
+}
+
+.botones-agua {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.botones-agua button {
+  flex: 1;
+  background-color: #111827;
+  border: 1px solid #374151;
+  color: #4ade80;
+  border-radius: 8px;
+  padding: 0.4rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.botones-agua button:hover {
+  background-color: #374151;
+}
+
+.tarjeta-proxima-comida {
+  grid-column: span 2;
+}
