@@ -1,211 +1,72 @@
-async function verificarBackend() {
-  const estadoElemento = document.getElementById('estado-backend');
-  if (!estadoElemento) return;
-
-  try {
-    const respuesta = await fetch('/api/health');
-    const datos = await respuesta.json();
-    estadoElemento.textContent = datos.message;
-  } catch (error) {
-    estadoElemento.textContent = 'No se pudo conectar con el backend';
-  }
-}
-
 // --- Usuario ---
 
 async function obtenerUsuario() {
-  const respuesta = await fetch('/api/usuario');
-  if (respuesta.status === 404) return null;
-  return respuesta.json();
+  const usuarios = await dbObtenerTodos('usuarios');
+  return usuarios.length > 0 ? usuarios[0] : null;
 }
 
 async function crearUsuario(nombre) {
-  const respuesta = await fetch('/api/usuario', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ nombre })
-  });
-  return respuesta.json();
+  const existente = await obtenerUsuario();
+  if (existente) return existente;
+
+  return dbAgregar('usuarios', { nombre, creado_en: new Date().toISOString() });
 }
 
 // --- Perfil ---
 
 async function obtenerPerfil(usuarioId) {
-  const respuesta = await fetch(`/api/perfil/${usuarioId}`);
-  if (respuesta.status === 404) return null;
-  return respuesta.json();
+  return dbObtenerPorId('perfil', Number(usuarioId));
 }
 
 async function guardarPerfil(usuarioId, datosPerfil) {
-  const respuesta = await fetch(`/api/perfil/${usuarioId}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(datosPerfil)
-  });
-  return respuesta.json();
+  const perfil = {
+    usuario_id: Number(usuarioId),
+    ...datosPerfil,
+    actualizado_en: new Date().toISOString()
+  };
+  return dbGuardar('perfil', perfil);
 }
 
 // --- Objetivos ---
 
 async function obtenerObjetivoActivo(usuarioId) {
-  const respuesta = await fetch(`/api/objetivo/${usuarioId}`);
-  if (respuesta.status === 404) return null;
-  return respuesta.json();
+  const objetivos = await dbObtenerPorIndice('objetivos', 'usuario_id', Number(usuarioId));
+  return objetivos.find(o => o.activo === 1) || null;
 }
 
 async function calcularVistaPreviaObjetivo(usuarioId, tipo) {
-  const respuesta = await fetch(`/api/objetivo/${usuarioId}/vista-previa?tipo=${tipo}`);
-  return respuesta.json();
+  const perfil = await obtenerPerfil(usuarioId);
+  if (!perfil) throw new Error('Debes completar tu perfil antes de definir un objetivo');
+  return calcularCaloriasYMacros(perfil, tipo);
 }
 
 async function guardarObjetivo(usuarioId, tipo, macrosManuales = null) {
-  const respuesta = await fetch(`/api/objetivo/${usuarioId}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ tipo, macrosManuales })
-  });
-  return respuesta.json();
-}
+  const perfil = await obtenerPerfil(usuarioId);
+  if (!perfil) throw new Error('Debes completar tu perfil antes de definir un objetivo');
 
-// --- Alimentos ---
+  const macros = macrosManuales || calcularCaloriasYMacros(perfil, tipo);
+  const calculadoAutomaticamente = macrosManuales ? 0 : 1;
 
-async function buscarAlimentos(texto = '') {
-  const respuesta = await fetch(`/api/alimentos?buscar=${encodeURIComponent(texto)}`);
-  return respuesta.json();
-}
+  // Desactivar objetivos anteriores
+  const anteriores = await dbObtenerPorIndice('objetivos', 'usuario_id', Number(usuarioId));
+  for (const obj of anteriores.filter(o => o.activo === 1)) {
+    obj.activo = 0;
+    obj.fecha_fin = new Date().toISOString();
+    await dbGuardar('objetivos', obj);
+  }
 
-async function crearAlimentoPersonalizado(datos) {
-  const respuesta = await fetch('/api/alimentos', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ...datos, es_personalizado: true })
-  });
-  return respuesta.json();
-}
+  const nuevoObjetivo = {
+    usuario_id: Number(usuarioId),
+    tipo,
+    calorias_objetivo: macros.calorias,
+    proteinas_objetivo_g: macros.proteinas_g,
+    carbohidratos_objetivo_g: macros.carbohidratos_g,
+    grasas_objetivo_g: macros.grasas_g,
+    calculado_automaticamente: calculadoAutomaticamente,
+    fecha_inicio: new Date().toISOString(),
+    fecha_fin: null,
+    activo: 1
+  };
 
-async function obtenerCategorias() {
-  const respuesta = await fetch('/api/categorias');
-  return respuesta.json();
-}
-
-// --- Recetas ---
-
-async function obtenerRecetas() {
-  const respuesta = await fetch('/api/recetas');
-  return respuesta.json();
-}
-
-async function crearReceta(datos) {
-  const respuesta = await fetch('/api/recetas', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(datos)
-  });
-  return respuesta.json();
-}
-
-async function eliminarReceta(id) {
-  await fetch(`/api/recetas/${id}`, { method: 'DELETE' });
-}
-
-// --- Calendario ---
-
-async function obtenerDia(usuarioId, fechaISO) {
-  const respuesta = await fetch(`/api/calendario/dia/${usuarioId}/${fechaISO}`);
-  return respuesta.json();
-}
-
-async function agregarItemComida(comidaId, datos) {
-  const respuesta = await fetch(`/api/calendario/comida/${comidaId}/items`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(datos)
-  });
-  return respuesta.json();
-}
-
-async function eliminarItemComida(itemId) {
-  await fetch(`/api/calendario/items/${itemId}`, { method: 'DELETE' });
-}
-// --- Agua ---
-
-async function obtenerAgua(usuarioId, fechaISO) {
-  const respuesta = await fetch(`/api/agua/${usuarioId}/${fechaISO}`);
-  return respuesta.json();
-}
-
-async function agregarAgua(usuarioId, fechaISO, mililitros) {
-  const respuesta = await fetch(`/api/agua/${usuarioId}/${fechaISO}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ mililitros })
-  });
-  return respuesta.json();
-}
-// --- Inventario ---
-
-async function obtenerInventario(usuarioId) {
-  const respuesta = await fetch(`/api/inventario/${usuarioId}`);
-  return respuesta.json();
-}
-
-async function guardarEnInventario(usuarioId, alimentoId, cantidadGramos) {
-  const respuesta = await fetch(`/api/inventario/${usuarioId}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ alimento_id: alimentoId, cantidad_gramos: cantidadGramos })
-  });
-  return respuesta.json();
-}
-
-async function ajustarInventario(usuarioId, alimentoId, delta) {
-  const respuesta = await fetch(`/api/inventario/${usuarioId}/${alimentoId}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ delta })
-  });
-  return respuesta.json();
-}
-
-async function eliminarDeInventario(usuarioId, alimentoId) {
-  await fetch(`/api/inventario/${usuarioId}/${alimentoId}`, { method: 'DELETE' });
-}
-
-async function obtenerNecesidadesSemana(usuarioId, inicioISO, finISO) {
-  const respuesta = await fetch(`/api/inventario/${usuarioId}/necesidades?inicio=${inicioISO}&fin=${finISO}`);
-  return respuesta.json();
-}
-// --- Peso ---
-
-async function obtenerHistorialPeso(usuarioId) {
-  const respuesta = await fetch(`/api/peso/${usuarioId}`);
-  return respuesta.json();
-}
-
-async function crearRegistroPeso(usuarioId, datos) {
-  const respuesta = await fetch(`/api/peso/${usuarioId}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(datos)
-  });
-  return respuesta.json();
-}
-
-async function eliminarRegistroPeso(id) {
-  await fetch(`/api/peso/${id}`, { method: 'DELETE' });
-}
-// --- Recordatorios ---
-
-async function obtenerRecordatorios(usuarioId) {
-  const respuesta = await fetch(`/api/recordatorios/${usuarioId}`);
-  return respuesta.json();
-}
-
-async function guardarRecordatorio(usuarioId, tipo, hora, activo) {
-  const respuesta = await fetch(`/api/recordatorios/${usuarioId}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ tipo, hora, activo })
-  });
-  return respuesta.json();
+  return dbAgregar('objetivos', nuevoObjetivo);
 }
