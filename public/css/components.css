@@ -1,23 +1,33 @@
 .pagina {
   max-width: 600px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 2rem 1.25rem;
+}
+
+.pagina-ancha {
+  max-width: 100%;
+  padding: 1.5rem;
 }
 
 .encabezado h1 {
-  color: #4ade80;
-  font-size: 1.75rem;
+  font-size: 1.6rem;
   margin-bottom: 1.5rem;
 }
 
+/* --- Tarjetas --- */
+
 .tarjeta {
-  background-color: #1f2937;
-  border-radius: 12px;
+  background: linear-gradient(160deg, var(--fondo-tarjeta), #14161c);
+  border: 1px solid var(--borde);
+  border-radius: 16px;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
+
+/* --- Formularios --- */
 
 .campo {
   display: flex;
@@ -26,67 +36,106 @@
 }
 
 .campo label {
-  font-size: 0.9rem;
-  color: #d1d5db;
+  font-size: 0.85rem;
+  color: var(--texto-secundario);
+  font-weight: 600;
 }
 
 .campo input,
-.campo select {
-  background-color: #111827;
-  border: 1px solid #374151;
-  border-radius: 8px;
-  padding: 0.6rem 0.8rem;
-  color: #ffffff;
+.campo select,
+textarea {
+  background-color: var(--fondo-input);
+  border: 1.5px solid var(--borde);
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+  color: var(--texto);
   font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s ease;
 }
 
 .campo input:focus,
-.campo select:focus {
+.campo select:focus,
+textarea:focus {
   outline: none;
-  border-color: #4ade80;
+  border-color: var(--verde);
 }
 
+/* --- Botones --- */
+
 .boton-principal {
-  background-color: #4ade80;
-  color: #111827;
+  background: linear-gradient(90deg, var(--verde), var(--verde-oscuro));
+  color: #ffffff;
   border: none;
-  border-radius: 8px;
-  padding: 0.8rem;
+  border-radius: 12px;
+  padding: 0.9rem;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 4px 14px rgba(34,197,94,0.35);
 }
 
 .boton-principal:hover {
-  background-color: #22c55e;
-}
-
-.mensaje {
-  margin-top: 1rem;
-  text-align: center;
-  color: #4ade80;
-}
-
-.mensaje.error {
-  color: #f87171;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(34,197,94,0.45);
 }
 
 .boton-secundario {
   background-color: transparent;
-  color: #4ade80;
-  border: 1px solid #4ade80;
-  border-radius: 8px;
-  padding: 0.7rem;
-  font-size: 1rem;
+  color: var(--naranjo-claro);
+  border: 1.5px solid var(--naranjo);
+  border-radius: 12px;
+  padding: 0.75rem;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
 .boton-secundario:hover {
-  background-color: rgba(74, 222, 128, 0.1);
+  background-color: rgba(251,146,60,0.12);
 }
+
+.mensaje {
+  margin-top: 1rem;
+  text-align: center;
+  color: var(--verde-claro);
+  font-weight: 600;
+}
+
+.mensaje.error {
+  color: var(--rojo);
+}
+
+/* --- Buscador de resultados --- */
+
+.resultados-busqueda {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.resultado-item {
+  background-color: var(--fondo-input);
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 0.6rem 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: border-color 0.2s ease;
+}
+
+.resultado-item:hover {
+  border-color: var(--verde);
+}
+
+/* --- Lista de alimentos / recetas --- */
 
 .lista-alimentos {
   display: flex;
@@ -96,68 +145,40 @@
 }
 
 .tarjeta-alimento {
-  background-color: #1f2937;
-  border-radius: 10px;
-  padding: 1rem;
+  background-color: var(--fondo-tarjeta);
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  padding: 1rem 1.2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .tarjeta-alimento .info-alimento h3 {
   font-size: 1rem;
-  color: #ffffff;
+  color: var(--texto);
   margin-bottom: 0.2rem;
 }
 
 .tarjeta-alimento .info-alimento span {
   font-size: 0.8rem;
-  color: #9ca3af;
+  color: var(--texto-secundario);
 }
 
 .tarjeta-alimento .macros-alimento {
   text-align: right;
   font-size: 0.85rem;
-  color: #d1d5db;
+  color: var(--texto-secundario);
 }
 
 .tarjeta-alimento .macros-alimento strong {
-  color: #4ade80;
-}
-
-textarea {
-  background-color: #111827;
-  border: 1px solid #374151;
-  border-radius: 8px;
-  padding: 0.6rem 0.8rem;
-  color: #ffffff;
+  color: var(--verde-claro);
   font-size: 1rem;
-  font-family: inherit;
-  resize: vertical;
 }
 
-.resultados-busqueda {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  max-height: 180px;
-  overflow-y: auto;
-}
-
-.resultado-item {
-  background-color: #111827;
-  border-radius: 6px;
-  padding: 0.5rem 0.7rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  font-size: 0.85rem;
-}
-
-.resultado-item:hover {
-  background-color: #374151;
-}
+/* --- Ingredientes de receta --- */
 
 .lista-ingredientes {
   display: flex;
@@ -166,8 +187,8 @@ textarea {
 }
 
 .ingrediente-item {
-  background-color: #111827;
-  border-radius: 8px;
+  background-color: var(--fondo-input);
+  border-radius: 10px;
   padding: 0.6rem 0.8rem;
   display: flex;
   justify-content: space-between;
@@ -177,46 +198,51 @@ textarea {
 
 .ingrediente-item input {
   width: 70px;
-  background-color: #1f2937;
-  border: 1px solid #374151;
-  border-radius: 6px;
-  padding: 0.3rem;
-  color: #ffffff;
+  background-color: var(--fondo-tarjeta);
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  padding: 0.35rem;
+  color: var(--texto);
   text-align: center;
 }
 
 .ingrediente-item .btn-quitar {
   background: none;
   border: none;
-  color: #f87171;
+  color: var(--rojo);
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
 .macros-totales {
-  background-color: #111827;
-  border-radius: 8px;
-  padding: 0.8rem;
+  background: linear-gradient(90deg, rgba(34,197,94,0.15), rgba(251,146,60,0.15));
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  padding: 0.9rem;
   text-align: center;
-  color: #4ade80;
+  color: var(--verde-claro);
+  font-weight: 700;
   font-size: 0.9rem;
 }
 
 .tarjeta-receta {
-  background-color: #1f2937;
-  border-radius: 10px;
-  padding: 1rem;
+  background-color: var(--fondo-tarjeta);
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  padding: 1.2rem;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.5rem;
 }
 
 .tarjeta-receta h3 {
-  color: #ffffff;
+  color: var(--texto);
+  font-size: 1.1rem;
 }
 
 .tarjeta-receta .macros-alimento {
-  color: #9ca3af;
+  color: var(--texto-secundario);
   font-size: 0.85rem;
 }
 
@@ -224,23 +250,34 @@ textarea {
   align-self: flex-end;
   background: none;
   border: none;
-  color: #f87171;
+  color: var(--rojo);
   cursor: pointer;
   font-size: 0.85rem;
+  font-weight: 600;
 }
+
+/* --- Inventario --- */
+
 .item-inventario {
-  background-color: #1f2937;
-  border-radius: 10px;
-  padding: 1rem;
+  background-color: var(--fondo-tarjeta);
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  padding: 1rem 1.2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .item-inventario .info-alimento h3 {
   font-size: 1rem;
-  color: #ffffff;
+  color: var(--texto);
+}
+
+.item-inventario .info-alimento span {
+  font-size: 0.8rem;
+  color: var(--texto-secundario);
 }
 
 .item-inventario .controles-inv {
@@ -250,25 +287,31 @@ textarea {
 }
 
 .item-inventario .controles-inv button {
-  background-color: #111827;
-  border: 1px solid #374151;
-  color: #4ade80;
-  border-radius: 6px;
-  width: 28px;
-  height: 28px;
+  background-color: var(--fondo-input);
+  border: 1px solid var(--borde);
+  color: var(--verde-claro);
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
   cursor: pointer;
+  font-weight: 700;
 }
 
 .item-inventario .btn-eliminar-inv {
-  color: #f87171 !important;
+  color: var(--rojo) !important;
+  width: auto !important;
+  padding: 0 0.6rem;
 }
+
+/* --- Recordatorios --- */
+
 .fila-recordatorio {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  padding: 0.6rem 0;
-  border-bottom: 1px solid #374151;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--borde);
 }
 
 .fila-recordatorio:last-child {
@@ -277,19 +320,43 @@ textarea {
 
 .fila-recordatorio span {
   flex: 1;
-  color: #ffffff;
+  color: var(--texto);
   font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .fila-recordatorio input[type="time"] {
-  background-color: #111827;
-  border: 1px solid #374151;
-  border-radius: 6px;
-  padding: 0.3rem 0.5rem;
-  color: #ffffff;
+  background-color: var(--fondo-input);
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  padding: 0.35rem 0.6rem;
+  color: var(--texto);
 }
 
 .fila-recordatorio input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
+  accent-color: var(--verde);
+}
+
+/* --- Responsive general --- */
+
+@media (max-width: 480px) {
+  .pagina {
+    padding: 1.25rem 1rem;
+  }
+
+  .tarjeta {
+    padding: 1.1rem;
+  }
+
+  .tarjeta-alimento,
+  .item-inventario {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tarjeta-alimento .macros-alimento {
+    text-align: left;
+  }
 }

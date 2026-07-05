@@ -44,6 +44,7 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Backend funcionando correctamente' });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`Accesible en tu red local en http://192.168.1.14:${PORT}`);
 });

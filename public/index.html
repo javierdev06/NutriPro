@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#111827">
 </head>
 <body>
   <div class="pagina pagina-ancha">
@@ -14,17 +16,16 @@
       <h1 id="saludo-usuario">NutriPro</h1>
     </header>
 
-    <nav style="display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1rem;">
-      <a href="pages/perfil.html" style="color:#4ade80;">Perfil</a>
-      <a href="pages/objetivos.html" style="color:#4ade80;">Objetivos</a>
-      <a href="pages/alimentos.html" style="color:#4ade80;">Alimentos</a>
-      <a href="pages/recetas.html" style="color:#4ade80;">Recetas</a>
-      <a href="pages/calendario.html" style="color:#4ade80;">Calendario</a>
-      <a href="pages/recordatorios.html" style="color:#4ade80;">Recordatorios</a>
-      <a href="pages/inventario.html" style="color:#4ade80;">Inventario</a>
-      <a href="pages/compras.html" style="color:#4ade80;">Lista de Compras</a>
-      <a href="pages/peso.html" style="color:#4ade80;">Registro de Peso</a>
-
+    <nav class="nav-principal">
+        <a href="pages/perfil.html">Perfil</a>
+        <a href="pages/objetivos.html">Objetivos</a>
+        <a href="pages/alimentos.html">Alimentos</a>
+        <a href="pages/recetas.html">Recetas</a>
+        <a href="pages/calendario.html">Calendario</a>
+        <a href="pages/inventario.html">Inventario</a>
+        <a href="pages/compras.html">Compras</a>
+        <a href="pages/peso.html">Peso</a>
+        <a href="pages/recordatorios.html">Recordatorios</a>
     </nav>
 
     <div id="contenido-dashboard" class="grid-dashboard">
@@ -41,5 +42,12 @@
     <script src="js/api.js"></script>
     <script src="js/pages/dashboard.js"></script>
     <script src="js/notificaciones.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+            .then(() => console.log('Service Worker registrado correctamente'))
+            .catch((error) => console.error('Error al registrar Service Worker:', error));
+        }
+</script>
 </body>
 </html>
