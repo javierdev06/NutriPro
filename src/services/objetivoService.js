@@ -15,6 +15,15 @@ function desactivarObjetivosAnteriores(usuarioId) {
   stmt.run(usuarioId);
 }
 
+// Calcula calorias y macros SIN guardar, para mostrar una vista previa editable
+export function calcularVistaPrevia(usuarioId, tipo) {
+  const perfil = obtenerPerfil(usuarioId);
+  if (!perfil) {
+    throw new Error('Debes completar tu perfil antes de definir un objetivo');
+  }
+  return calcularCaloriasYMacros(perfil, tipo);
+}
+
 export function crearObjetivo(usuarioId, tipo, macrosManuales = null) {
   const perfil = obtenerPerfil(usuarioId);
   if (!perfil) {

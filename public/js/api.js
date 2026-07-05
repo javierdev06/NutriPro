@@ -44,3 +44,25 @@ async function guardarPerfil(usuarioId, datosPerfil) {
   });
   return respuesta.json();
 }
+
+// --- Objetivos ---
+
+async function obtenerObjetivoActivo(usuarioId) {
+  const respuesta = await fetch(`/api/objetivo/${usuarioId}`);
+  if (respuesta.status === 404) return null;
+  return respuesta.json();
+}
+
+async function calcularVistaPreviaObjetivo(usuarioId, tipo) {
+  const respuesta = await fetch(`/api/objetivo/${usuarioId}/vista-previa?tipo=${tipo}`);
+  return respuesta.json();
+}
+
+async function guardarObjetivo(usuarioId, tipo, macrosManuales = null) {
+  const respuesta = await fetch(`/api/objetivo/${usuarioId}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ tipo, macrosManuales })
+  });
+  return respuesta.json();
+}

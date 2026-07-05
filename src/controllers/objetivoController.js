@@ -1,4 +1,4 @@
-import { obtenerObjetivoActivo, crearObjetivo } from '../services/objetivoService.js';
+import { obtenerObjetivoActivo, crearObjetivo, calcularVistaPrevia } from '../services/objetivoService.js';
 
 const TIPOS_VALIDOS = ['ganar_musculo', 'perder_grasa', 'mantener_peso', 'recomposicion'];
 
@@ -11,6 +11,22 @@ export function getObjetivoActivo(req, res) {
   }
 
   res.json(objetivo);
+}
+
+export function getVistaPrevia(req, res) {
+  const usuarioId = req.params.usuarioId;
+  const tipo = req.query.tipo;
+
+  if (!TIPOS_VALIDOS.includes(tipo)) {
+    return res.status(400).json({ error: 'Tipo de objetivo invalido' });
+  }
+
+  try {
+    const macros = calcularVistaPrevia(usuarioId, tipo);
+    res.json(macros);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 }
 
 export function postObjetivo(req, res) {

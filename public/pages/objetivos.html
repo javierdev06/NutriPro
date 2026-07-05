@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NutriPro — Objetivos</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+</head>
+<body>
+  <div class="pagina">
+    <header class="encabezado">
+      <h1>Mi Objetivo</h1>
+    </header>
+
+    <main class="contenido">
+      <div class="tarjeta">
+        <div class="campo">
+          <label for="tipo-objetivo">Selecciona tu objetivo</label>
+          <select id="tipo-objetivo">
+            <option value="">Selecciona una opcion</option>
+            <option value="ganar_musculo">Ganar musculo</option>
+            <option value="perder_grasa">Perder grasa</option>
+            <option value="mantener_peso">Mantener peso</option>
+            <option value="recomposicion">Recomposicion corporal</option>
+          </select>
+        </div>
+
+        <button id="btn-calcular" class="boton-secundario">Calcular automaticamente</button>
+      </div>
+
+      <div class="tarjeta" id="tarjeta-macros" style="display:none;">
+        <div class="campo">
+          <label for="calorias">Calorias objetivo</label>
+          <input type="number" id="calorias">
+        </div>
+        <div class="campo">
+          <label for="proteinas">Proteinas (g)</label>
+          <input type="number" id="proteinas">
+        </div>
+        <div class="campo">
+          <label for="carbohidratos">Carbohidratos (g)</label>
+          <input type="number" id="carbohidratos">
+        </div>
+        <div class="campo">
+          <label for="grasas">Grasas (g)</label>
+          <input type="number" id="grasas">
+        </div>
+
+        <button id="btn-guardar" class="boton-principal">Guardar objetivo</button>
+      </div>
+
+      <p id="mensaje-objetivo" class="mensaje"></p>
+    </main>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/pages/objetivos.js"></script>
+</body>
+</html>
