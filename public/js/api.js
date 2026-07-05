@@ -545,3 +545,28 @@ async function generarPlanSemanal(usuarioId, fechaInicioISO) {
     }
   }
 }
+// --- Sustitucion inteligente ---
+
+async function obtenerSustitutos(alimentoId) {
+  const alimentos = await dbObtenerTodos('alimentos');
+  const original = alimentos.find(a => a.id === Number(alimentoId));
+  if (!original || !original.categoria_id) return [];
+
+  return alimentos.filter(a => a.categoria_id === original.categoria_id && a.id !== original.id);
+}
+
+async function sustituirItemComida(itemId, alimentoOriginalId, nuevoAlimentoId, gramosOriginales) {
+  const alimentos = await dbObtenerTodos('alimentos');
+  const original = alimentos.find(a => a.id === Number(alimentoOriginalId));
+  const nuevo = alimentos.find(a => a.id === Number(nuevoAlimentoId));
+
+  // Mantiene las mismas calorias aproximadas, ajustando los gramos segun el nuevo alimento
+  const caloriasOriginales = (original.calorias_100g * gramosOriginales) / 100;
+  const nuevosGramos = Math.round((caloriasOriginales * 100) / nuevo.calorias_100g / 5) * 5;
+
+  const item = await dbObtenerPorId('comida_items', Number(itemId));
+  item.alimento_id = nuevo.id;
+  item.gramos = Math.max(10, nuevosGramos);
+
+  return dbGuardar('comida_items', item);
+}

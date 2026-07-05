@@ -71,7 +71,10 @@ function crearBloqueComida(comida) {
   const itemsHTML = comida.items.map(item => `
     <div class="item-comida">
       <span>${item.alimento_nombre || item.receta_nombre} (${item.macros.calorias} kcal)</span>
-      <button class="btn-quitar-item" data-item-id="${item.id}">x</button>
+      <div style="display:flex; gap:0.4rem;">
+        ${item.alimento_id ? `<button class="btn-sustituir-item" data-item-id="${item.id}" data-alimento-id="${item.alimento_id}" data-gramos="${item.gramos}">&#8635;</button>` : ''}
+        <button class="btn-quitar-item" data-item-id="${item.id}">x</button>
+      </div>
     </div>
   `).join('');
 
@@ -91,6 +94,16 @@ function crearBloqueComida(comida) {
     btn.addEventListener('click', async (e) => {
       await eliminarItemComida(e.target.dataset.itemId);
       renderizarSemana();
+    });
+  });
+
+  bloque.querySelectorAll('.btn-sustituir-item').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      abrirModalSustitucion(
+        e.target.dataset.itemId,
+        e.target.dataset.alimentoId,
+        Number(e.target.dataset.gramos)
+      );
     });
   });
 
@@ -202,6 +215,45 @@ btnConfirmarItem.addEventListener('click', async () => {
   await agregarItemComida(comidaObjetivoId, datos);
   modal.style.display = 'none';
   renderizarSemana();
+});
+
+const modalSustitucion = document.getElementById('modal-sustitucion');
+const sustitutosResultados = document.getElementById('sustitutos-resultados');
+const btnCerrarSustitucion = document.getElementById('btn-cerrar-sustitucion');
+
+let itemASustituirId = null;
+let alimentoOriginalIdActual = null;
+let gramosOriginalesActuales = null;
+
+async function abrirModalSustitucion(itemId, alimentoOriginalId, gramosOriginales) {
+  itemASustituirId = itemId;
+  alimentoOriginalIdActual = alimentoOriginalId;
+  gramosOriginalesActuales = gramosOriginales;
+
+  const sustitutos = await obtenerSustitutos(alimentoOriginalId);
+  sustitutosResultados.innerHTML = '';
+
+  if (sustitutos.length === 0) {
+    sustitutosResultados.innerHTML = '<p class="mensaje">No hay otros alimentos en esta categoria</p>';
+  } else {
+    for (const sustituto of sustitutos) {
+      const div = document.createElement('div');
+      div.className = 'resultado-item';
+      div.textContent = `${sustituto.nombre} (${sustituto.calorias_100g} kcal/100g)`;
+      div.addEventListener('click', async () => {
+        await sustituirItemComida(itemASustituirId, alimentoOriginalIdActual, sustituto.id, gramosOriginalesActuales);
+        modalSustitucion.style.display = 'none';
+        renderizarSemana();
+      });
+      sustitutosResultados.appendChild(div);
+    }
+  }
+
+  modalSustitucion.style.display = 'flex';
+}
+
+btnCerrarSustitucion.addEventListener('click', () => {
+  modalSustitucion.style.display = 'none';
 });
 
 inicializar();

@@ -172,3 +172,14 @@
     flex: 1 0 85vw;
   }
 }
+.item-comida .btn-sustituir-item {
+  background-color: var(--fondo-tarjeta);
+  border: 1px solid var(--naranjo);
+  color: var(--naranjo-claro);
+  border-radius: 6px;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  line-height: 1;
+}
