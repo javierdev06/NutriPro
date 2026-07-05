@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NutriPro — Inventario</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+</head>
+<body>
+  <div class="pagina">
+    <header class="encabezado">
+      <h1>Mi Inventario</h1>
+    </header>
+
+    <main class="contenido">
+      <div class="tarjeta">
+        <div class="campo">
+          <label for="buscar-alimento-inv">Buscar alimento para agregar</label>
+          <input type="text" id="buscar-alimento-inv" placeholder="Buscar...">
+          <div id="resultados-inv" class="resultados-busqueda"></div>
+        </div>
+
+        <div id="seleccion-inv" style="display:none;">
+          <p id="nombre-seleccionado-inv" class="mensaje"></p>
+          <div class="campo">
+            <label for="cantidad-inv">Cantidad (gramos)</label>
+            <input type="number" id="cantidad-inv" value="500">
+          </div>
+          <button id="btn-guardar-inv" class="boton-principal">Guardar en inventario</button>
+        </div>
+      </div>
+
+      <p id="mensaje-inv" class="mensaje"></p>
+
+      <div id="lista-inventario" class="lista-alimentos"></div>
+    </main>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/pages/inventario.js"></script>
+</body>
+</html>

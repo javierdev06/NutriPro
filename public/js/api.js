@@ -142,3 +142,36 @@ async function agregarAgua(usuarioId, fechaISO, mililitros) {
   });
   return respuesta.json();
 }
+// --- Inventario ---
+
+async function obtenerInventario(usuarioId) {
+  const respuesta = await fetch(`/api/inventario/${usuarioId}`);
+  return respuesta.json();
+}
+
+async function guardarEnInventario(usuarioId, alimentoId, cantidadGramos) {
+  const respuesta = await fetch(`/api/inventario/${usuarioId}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ alimento_id: alimentoId, cantidad_gramos: cantidadGramos })
+  });
+  return respuesta.json();
+}
+
+async function ajustarInventario(usuarioId, alimentoId, delta) {
+  const respuesta = await fetch(`/api/inventario/${usuarioId}/${alimentoId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ delta })
+  });
+  return respuesta.json();
+}
+
+async function eliminarDeInventario(usuarioId, alimentoId) {
+  await fetch(`/api/inventario/${usuarioId}/${alimentoId}`, { method: 'DELETE' });
+}
+
+async function obtenerNecesidadesSemana(usuarioId, inicioISO, finISO) {
+  const respuesta = await fetch(`/api/inventario/${usuarioId}/necesidades?inicio=${inicioISO}&fin=${finISO}`);
+  return respuesta.json();
+}

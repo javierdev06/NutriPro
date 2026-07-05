@@ -91,3 +91,14 @@ CREATE TABLE IF NOT EXISTS registro_agua (
   UNIQUE(usuario_id, fecha),
   FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
+-- Inventario de alimentos en casa (en gramos)
+CREATE TABLE IF NOT EXISTS inventario (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  usuario_id INTEGER NOT NULL,
+  alimento_id INTEGER NOT NULL,
+  cantidad_gramos REAL NOT NULL DEFAULT 0,
+  actualizado_en TEXT NOT NULL DEFAULT (datetime('now')),
+  UNIQUE(usuario_id, alimento_id),
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+  FOREIGN KEY (alimento_id) REFERENCES alimentos(id) ON DELETE CASCADE
+);
